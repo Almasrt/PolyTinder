@@ -1,4 +1,5 @@
 import "../assets/index.css"
+import "../assets/Chat.css"
 
 const ChatHeader = () => {
     return (
@@ -9,7 +10,7 @@ const ChatHeader = () => {
                 </div>
                 <h3>Username</h3>
             </div>
-            <i className="loug-out-icon">-</i>
+            <i className="log-out-icon">-</i>
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import ChatDisplay from "./ChatDisplay"
 import ChatHeader from "./ChatHeader"
 import MatchesDisplay from "./MatchesDisplay"
-import "../assets/ChatContainer.css"
+import "../assets/Chat.css"
 import "../assets/index.css"
 
 const ChatContainer = () => {

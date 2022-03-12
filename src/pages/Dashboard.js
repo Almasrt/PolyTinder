@@ -2,7 +2,7 @@ import TinderCard from 'react-tinder-card';
 import useState from 'react-hook-use-state';
 import "../assets/DashBoard.css"
 import "../assets/index.css"
-import Header from '../Components/Header';
+
 import ChatContainer from "../Components/ChatContainer"
 
 
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
     return (
       <div className="dashboard">
-        <Header/>
+        <ChatContainer/>
         <div className="dashboard__swipe-container">
           <div className="dashboard__card-container">
             {characters.map((character) =>

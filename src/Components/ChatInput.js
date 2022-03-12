@@ -1,15 +1,15 @@
 import useState from 'react-hook-use-state';
-import "../assets/Nav.css"
+import "../assets/Chat.css"
 
-const Chat = () => {
+const ChatInput = () => {
     const [textarea, setTextArea] = useState(null);
     return (
         <div className="chat-input">
             <textarea value={""} onChange={(e) => setTextArea(e.target.value)}/>
-            <button className="nav__button" >Submit</button>
+            <button className="home__button">Submit</button>
         </div>
         
     )
 }
 
-export default Chat;
+export default ChatInput;
