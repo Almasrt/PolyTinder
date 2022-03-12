@@ -24,6 +24,7 @@ nav {
     height: 70px;
     padding-top: 15px;
     object-fit: contain;
+    padding-top: 0px;
 }
 
 .nav__button:disabled {
@@ -41,6 +42,6 @@ nav {
     font-size: 18px;
     padding: 9px 10px;
     border-radius: 18px;
-    border: none;
+    border: solid 1px rgb(206, 206, 206);
     margin: 10px
 }
