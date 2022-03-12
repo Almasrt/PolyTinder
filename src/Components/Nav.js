@@ -15,7 +15,7 @@ const Nav = ({setShowModal, showModal, setIsSignUp}) => {
             <h3>POLYTINDER</h3>
         <img className="nav__logo"
                 src="https://cdn.iconscout.com/icon/free/png-256/tinder-3089510-2567362.png" 
-                alt="Tinder logo gris" />
+                alt="Tinder logo" />
         </div>
 
         {!authToken && <IconButton><button 
