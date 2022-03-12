@@ -4,7 +4,17 @@
     width: 100vw;
     height: 100vh;
     position: fixed;
-    background: linear-gradient(to bottom, rgb(54, 54, 54), white);
+    background-attachment: fixed;
+	background-repeat: no-repeat;
+	background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.808)
+  ),url(./polytech-montpellier-presentation.jpg);
+	background-size: cover;
+}
+
+.home {
+    margin-top: 14vh;
 }
 
 .home__button {
@@ -25,4 +35,9 @@
 .home__button:disabled {
     color: grey;
     background: linear-gradient(45deg, #7e2c4486, #9e4238);
+}
+
+.home__title {
+    font-size: 90px;
+    color: rgb(255, 255, 255)
 }
