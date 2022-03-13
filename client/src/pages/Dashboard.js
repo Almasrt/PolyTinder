@@ -14,11 +14,6 @@ const Dashboard = () => {
   const [genderedUsers, setGenderedUsers] = useState(null)
   const [cookies, setCookie, removeCookie] = useCookies(['user'])
 
-  const swiped = (direction, nameToDelete) => {
-    console.log('removing: ' + nameToDelete)
-    setLastDirection(direction)
-  }
-
   const outOfFrame = (name) => {
     console.log(name + ' left the screen!')
   }
@@ -39,7 +34,7 @@ const Dashboard = () => {
   const getGenderedUsers = async () => {
     try {
       const response = await axios.get('http://localhost:8000/gendered-users', {
-        params: { gender: user?.gender_interest }
+        params: { gender: user?.gender_interest, userId: userId }
       })
       setGenderedUsers(response.data)
     } catch (error) {
@@ -50,9 +45,32 @@ const Dashboard = () => {
   useEffect(() => {
     getUser()
     getGenderedUsers()
-  }, [user, genderedUsers])
+  }, [user])
 
-  console.log(genderedUsers)
+  const updateMatches = async (matchedUserId) => {
+    try {
+      console.log('upd', matchedUserId)
+      console.log('user ', userId)
+      axios.put('http://localhost:8000/addmatch', {
+        userId, 
+        matchedUserId
+      });
+      getUser()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const swiped = (direction, swipedUserId) => {
+    
+    if (direction === 'right') {
+      updateMatches(swipedUserId)
+    }
+    setLastDirection(direction)
+  }
+
+  
+
 
   return (
     <>
@@ -62,7 +80,7 @@ const Dashboard = () => {
       <div className="dashboard__swipe-container">
         <div className="dashboard__card-container">
           {genderedUsers?.map((genderedUser) =>
-          <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.first_name)} onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}>
+          <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}>
             <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>
               <h3>{genderedUser.first_name}</h3>
             </div>
