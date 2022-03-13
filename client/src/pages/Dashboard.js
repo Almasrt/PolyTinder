@@ -2,12 +2,17 @@ import TinderCard from 'react-tinder-card';
 import useState from 'react-hook-use-state';
 import "../assets/DashBoard.css"
 import "../assets/index.css"
-
 import ChatContainer from "../Components/ChatContainer"
+import axios from 'axios';
+import { useCookies } from 'react-cookie'
+import { useEffect } from 'react';
 
 
 const Dashboard = () => {
   const [lastDirection, setLastDirection] = useState()
+  const [user, setUser] = useState(null)
+  const [genderedUsers, setGenderedUsers] = useState(null)
+  const [cookies, setCookie, removeCookie] = useCookies(['user'])
 
   const swiped = (direction, nameToDelete) => {
     console.log('removing: ' + nameToDelete)
@@ -18,48 +23,60 @@ const Dashboard = () => {
     console.log(name + ' left the screen!')
   }
 
-  const characters = [
-    {
-      name: 'Richard Hendricks',
-      url: 'https://cdn.radiofrance.fr/s3/cruiser-production/2021/11/91ad1ce7-db36-454e-9d42-75d9925f457a/870x489_woodpecker_gettyimages-940391782.jpg'
-    },
-    {
-      name: 'Erlich Bachman',
-      url: 'https://cdn.radiofrance.fr/s3/cruiser-production/2021/11/91ad1ce7-db36-454e-9d42-75d9925f457a/870x489_woodpecker_gettyimages-940391782.jpg'
-    },
-    {
-      name: 'Monica Hall',
-      url: 'https://cdn.radiofrance.fr/s3/cruiser-production/2021/11/91ad1ce7-db36-454e-9d42-75d9925f457a/870x489_woodpecker_gettyimages-940391782.jpg'
-    },
-    {
-      name: 'Jared Dunn',
-      url: 'https://cdn.radiofrance.fr/s3/cruiser-production/2021/11/91ad1ce7-db36-454e-9d42-75d9925f457a/870x489_woodpecker_gettyimages-940391782.jpg'
-    },
-    {
-      name: 'Dinesh Chugtai',
-      url: 'https://cdn.radiofrance.fr/s3/cruiser-production/2021/11/91ad1ce7-db36-454e-9d42-75d9925f457a/870x489_woodpecker_gettyimages-940391782.jpg'
-    }];
+  const userId = cookies.UserId
 
-    return (
-      <div className="dashboard">
-        <ChatContainer/>
-        <div className="dashboard__swipe-container">
-          <div className="dashboard__card-container">
-            {characters.map((character) =>
-            <TinderCard className='swipe' preventSwipe={["up", "down"]} key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
-              <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
-                <h3>{character.name}</h3>
-              </div>
-            </TinderCard>
-          )}              
-          <div className="swipe-info">
-              {lastDirection ? <p>You swiped {lastDirection} !</p> : <p/>}
-          </div>
-          </div>
-
-        </div>
-      </div>
-    );
+  const getUser = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/user', {
+        params: {userId}
+      })
+      setUser(response.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
+
+  const getGenderedUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/gendered-users', {
+        params: { gender: user?.gender_interest }
+      })
+      setGenderedUsers(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+    getGenderedUsers()
+  }, [user, genderedUsers])
+
+  console.log(genderedUsers)
+
+  return (
+    <>
+    {user && genderedUsers &&
+    <div className="dashboard">
+      <ChatContainer user={user}/>
+      <div className="dashboard__swipe-container">
+        <div className="dashboard__card-container">
+          {genderedUsers?.map((genderedUser) =>
+          <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.first_name)} onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}>
+            <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>
+              <h3>{genderedUser.first_name}</h3>
+            </div>
+          </TinderCard>
+        )}              
+        <div className="swipe-info">
+            {lastDirection ? <p>You swiped {lastDirection} !</p> : <p/>}
+        </div>
+        </div>
+
+      </div>
+    </div>}
+    </>
+  );
+}
   
   export default Dashboard;

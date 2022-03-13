@@ -5,6 +5,7 @@ const uri = 'mongodb+srv://test:test@cluster0.tmybi.mongodb.net/Cluster0?retryWr
 const cors = require('cors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { restart } = require('nodemon')
 const app = express()
 const PORT = 8000
 
@@ -70,15 +71,34 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.get('/users', async (req, res) => {
+app.get('/user', async (req, res) => {
     const client = new MongoClient(uri)
+    const userId = req.query.userId
+
     try {
         await client.connect()
         const database = client.db('data')
         const users = database.collection('users')
 
-        const returnedUsers = await users.find().toArray()
-        res.send(returnedUsers)
+        const query = { user_id: userId }
+        const user = await users.findOne(query)
+        res.send(user)
+    } finally {
+        await client.close()
+    }
+})
+
+app.get('/gendered-users', async (req, res) => {
+    const client = new MongoClient(uri)
+    const gender = req.query.gender
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+        const query = { gender_identity: { $eq : gender } }
+        const foundUsers = await users.find(query).toArray()
+        
+        res.send(foundUsers)
     }
     finally{
         await client.close()
