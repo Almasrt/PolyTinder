@@ -16,9 +16,8 @@ const Nav = ({ authToken, setShowModal, showModal, setIsSignUp}) => {
                 alt="Tinder logo" />
         </div>
 
-        {!authToken && <IconButton><button 
+        {!authToken && <IconButton onClick={handleClick}><button 
             className="nav__button" 
-            onClick={handleClick}
             disabled={showModal}>Log in</button></IconButton>}
     </nav>
     )

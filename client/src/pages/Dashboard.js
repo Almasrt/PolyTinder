@@ -43,7 +43,7 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    getUser()
+      getUser()
   }, [])
 
   useEffect(() => {

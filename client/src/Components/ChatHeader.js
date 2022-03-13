@@ -1,6 +1,8 @@
 import "../assets/index.css"
 import "../assets/Chat.css"
 import { useCookies } from 'react-cookie'
+import LogoutIcon from '@mui/icons-material/Logout';
+import { IconButton } from "@mui/material";
 
 const ChatHeader = ({user}) => {
     const [cookies, setCookie, removeCookie] = useCookies(['user'])
@@ -17,7 +19,7 @@ const ChatHeader = ({user}) => {
                 </div>
                 <h3>{user.first_name}</h3>
             </div>
-            <i className="log-out-icon" onClick={logout}>-</i>
+            <IconButton><i className="log-out-icon" onClick={logout}><LogoutIcon/></i></IconButton>
         </div>
     )
 }

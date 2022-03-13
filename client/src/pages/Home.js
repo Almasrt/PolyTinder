@@ -27,7 +27,7 @@ const Home = () => {
             <Nav authToken={authToken} setShowModal={setShowModal} showModal={showModal} setIsSignUp={setIsSignUp}/>
             <div className="home">
                 <h1 className="home__title">The Best Tinder</h1>
-                <IconButton size='large'><button className="home__button" onClick={handleClick} disabled={showModal}>
+                <IconButton onClick={handleClick} size='large'><button className="home__button" disabled={showModal}>
                     {authToken ? 'Signout' : 'Create Account'}
                 </button></IconButton>
 
