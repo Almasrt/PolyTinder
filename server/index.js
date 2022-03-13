@@ -1,13 +1,13 @@
 const express = require('express')
 const {v4: uuidv4} = require("uuid")
 const { MongoClient } = require('mongodb')
-const uri = 'mongodb+srv://test:test@cluster0.tmybi.mongodb.net/Cluster0?retryWrites=true&w=majority'
-const cors = require('cors')
 const bcrypt = require('bcrypt')
+const cors = require('cors')
 const jwt = require('jsonwebtoken')
-const { restart } = require('nodemon')
+require('dotenv').config()
 const app = express()
-const PORT = 8000
+const uri = process.env.URI
+const PORT = 9000
 
 app.use(cors())
 app.use(express.json())
@@ -171,10 +171,7 @@ app.put('/user', async (req, res) => {
 
 app.put('/addmatch', async (req, res) => {
     const client = new MongoClient(uri)
-    console.log(client)
     const { userId, matchedUserId } = req.body
-    console.log(userId)
-    console.log(matchedUserId)
     try {
         await client.connect()
         const database = client.db('data')
@@ -188,9 +185,43 @@ app.put('/addmatch', async (req, res) => {
         const user = await users.updateOne(query, updateDocument)
         res.send(user)
     } finally {
-        await client.close()
-        
+        await client.close() 
     }
 })
+
+app.get('/messages', async (req, res) => {
+    const client = new MongoClient(uri)
+    const {userId, correspondingUserId} = req.query
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const messages = database.collection('messages')
+
+        const query = {
+            from_userId: userId, to_userId: correspondingUserId
+        }
+        const foundMessages = await messages.find(query).toArray()
+        res.send(foundMessages)
+    } finally {
+        await client.close() 
+    }
+})
+
+app.post('/message', async (req, res) => {
+    const client = new MongoClient(uri)
+    const message = req.body.message
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const messages = database.collection('messages')
+        const insertedMessage = await messages.insertOne(message)
+        res.send(insertedMessage)
+    } finally {
+        await client.close() 
+    }
+})
+
+
 
 app.listen(PORT, () => console.log('server running on PORT ' + PORT ))

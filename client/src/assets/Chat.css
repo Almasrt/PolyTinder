@@ -35,7 +35,7 @@ textarea {
     border-bottom: solid 4px grey;
 }
 
-.chat-display {
+.chat-display, .matches-display {
     padding: 20px;
     height: 60vh;
     overflow-y: auto;
@@ -47,6 +47,10 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.chat-message-header {
+    display: flex;
 }
 
 .img-container {

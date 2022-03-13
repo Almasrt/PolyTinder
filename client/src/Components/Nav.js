@@ -1,13 +1,11 @@
 import "../assets/Nav.css"
 import IconButton from '@mui/material/IconButton';
 
-const Nav = ({setShowModal, showModal, setIsSignUp}) => {
+const Nav = ({ authToken, setShowModal, showModal, setIsSignUp}) => {
     const handleClick = () => {
         setShowModal(true)
         setIsSignUp(false)
     }
-
-    const authToken = false;
 
     return (
     <nav>

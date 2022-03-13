@@ -22,7 +22,7 @@ const Dashboard = () => {
 
   const getUser = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/user', {
+      const response = await axios.get('http://localhost:9000/user', {
         params: {userId}
       })
       setUser(response.data)
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   const getGenderedUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/gendered-users', {
+      const response = await axios.get('http://localhost:9000/gendered-users', {
         params: { gender: user?.gender_interest, userId: userId }
       })
       setGenderedUsers(response.data)
@@ -44,14 +44,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     getUser()
-    getGenderedUsers()
+  }, [])
+
+  useEffect(() => {
+    if (user) {
+      getGenderedUsers()
+    }
   }, [user])
+
 
   const updateMatches = async (matchedUserId) => {
     try {
-      console.log('upd', matchedUserId)
-      console.log('user ', userId)
-      axios.put('http://localhost:8000/addmatch', {
+      axios.put('http://localhost:9000/addmatch', {
         userId, 
         matchedUserId
       });
