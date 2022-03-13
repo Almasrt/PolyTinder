@@ -69,17 +69,20 @@ const Dashboard = () => {
     setLastDirection(direction)
   }
 
-  
+  const matchedUserIds = user?.matches.map(({user_id}) => user_id)
+  const filteredGenderedUsers = genderedUsers?.filter(
+    genderedUser => !matchedUserIds.includes(genderedUser.user_id)
+  )
 
 
   return (
     <>
-    {user && genderedUsers &&
+    {user && filteredGenderedUsers &&
     <div className="dashboard">
       <ChatContainer user={user}/>
       <div className="dashboard__swipe-container">
         <div className="dashboard__card-container">
-          {genderedUsers?.map((genderedUser) =>
+          {filteredGenderedUsers?.map((genderedUser) =>
           <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}>
             <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>
               <h3>{genderedUser.first_name}</h3>
