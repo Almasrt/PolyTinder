@@ -91,14 +91,22 @@ app.get('/user', async (req, res) => {
 app.get('/gendered-users', async (req, res) => {
     const client = new MongoClient(uri)
     const gender = req.query.gender
+    const userId = req.query.userId
     try {
         await client.connect()
         const database = client.db('data')
         const users = database.collection('users')
-        const query = { gender_identity: { $eq : gender } }
-        const foundUsers = await users.find(query).toArray()
+        const query = { user_id: { $ne : userId } }
+        const query2 = { user_id: { $ne : userId }, gender_identity: { $eq: gender }}
+        if (gender == 'everyone'){
+            foundUsers = await users.find(query)
+        }
+        if (gender != 'everyone') {
+            foundUsers = await users.find(query2)
+        }
         
-        res.send(foundUsers)
+        const retfoundUsers = await foundUsers.toArray()
+        res.send(retfoundUsers)
     }
     finally{
         await client.close()
@@ -108,7 +116,6 @@ app.get('/gendered-users', async (req, res) => {
 app.put('/user', async (req, res) => {
     const client = new MongoClient(uri)
     const formData = req.body.formData
-    console.log(formData)
     try {
         await client.connect()
         const database = client.db('data')
@@ -132,6 +139,30 @@ app.put('/user', async (req, res) => {
         res.send(insertedUser)
     } finally {
         await client.close()
+    }
+})
+
+app.put('/addmatch', async (req, res) => {
+    const client = new MongoClient(uri)
+    console.log(client)
+    const { userId, matchedUserId } = req.body
+    console.log(userId)
+    console.log(matchedUserId)
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+
+
+        const query = { user_id: userId }
+        const updateDocument = {
+            $push: { matches: { user_id: matchedUserId }}, 
+        }
+        const user = await users.updateOne(query, updateDocument)
+        res.send(user)
+    } finally {
+        await client.close()
+        
     }
 })
 
