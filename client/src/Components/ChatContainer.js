@@ -4,10 +4,9 @@ import MatchesDisplay from "./MatchesDisplay"
 import "../assets/Chat.css"
 import "../assets/index.css"
 
-const ChatContainer = () => {
+const ChatContainer = ( {user} ) => {
     return <div className="chat-container">
-        <ChatHeader/>
-
+        <ChatHeader user = {user}/>
         <div>
             <button className="option">Matches</button>
             <button className="option">Chat</button>
