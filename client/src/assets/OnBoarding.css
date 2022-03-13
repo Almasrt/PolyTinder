@@ -13,6 +13,7 @@
 
 .onboarding {
     border-top: 1px solid rgb(228, 222, 222);
+    text-align: center;
 }
 
 .onboarding form input{
