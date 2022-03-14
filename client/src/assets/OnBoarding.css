@@ -54,6 +54,17 @@
     display: none;
 }
 
+.socials-input-container img {
+    padding: 16px;
+    width: 10%;
+}
+
+.social {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
 
 .onboarding form input[type="radio"]:checked + label{
     border: solid 2px rgb(228, 98, 119);

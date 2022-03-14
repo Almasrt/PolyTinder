@@ -193,32 +193,39 @@ const Settings = () => {
                             checked={user.gender_interest === 'everyone'}/>
                         <label htmlFor="everyone-gender-interest">Everyone</label>
                         </div>
-                    <label>Age Filters</label>
-                        <div className="multiple-input-container">
+                        <label>Social Networks</label>
+                    <div className="socials-input-container">
+                        <div className="social">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1936/1936319.png" alt="icone instagram"/>
                         <input 
-                            id="age_min"
-                            type="number"
-                            name="age_min"
-                            placeholder="age min"
-                            value={user.age_min}
-                            onChange={handleChange}/>
-                        <input 
-                            id="age_max"
-                            type="number"
-                            name="age_max"
-                            placeholder="age max"
-                            value={user.age_max}
+                            id="insta"
+                            type="text"
+                            name="insta"
+                            placeholder="@insta"
+                            value={user.insta}
                             onChange={handleChange}/>
                             </div>
-                    <label htmlFor="about">About me</label>
-                    <input 
-                            id="about"
+                        <div className="social">
+                        <img src="https://cdn-icons-png.flaticon.com/512/174/174870.png" alt="icone snapchat"/>
+                        <input 
+                            id="snap"
                             type="text"
-                            name="about"
-                            value={user.about}
-                            onChange={handleChange}
-                            required={true}
-                            placeholder="I like playing candy crush..."/>
+                            name="snap"
+                            placeholder="@snap"
+                            value={user.snap}
+                            onChange={handleChange}/>
+                            </div>
+                        <div className="social">
+                        <img src="https://cdn-icons.flaticon.com/png/512/665/premium/665209.png?token=exp=1647292707~hmac=80b9af4fab0b8c6c43a88fbd5142dfbd" alt="icone facebook"/>
+                        <input 
+                            id="facebook"
+                            type="text"
+                            name="facebook"
+                            placeholder="@facebook"
+                            value={user.facebook}
+                            onChange={handleChange}/>
+                            </div>
+                        </div>
                     <input type="submit"/>
               </section>
               <section>

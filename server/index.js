@@ -27,6 +27,7 @@ app.post('/signup', async (req, res) => {
         const database = client.db('data')
         const users = database.collection('users')
         const filters = database.collection('filters')
+        const socials = database.collection('socials')
 
         const existingUser = await users.findOne({email})
         if (existingUser) {
@@ -43,7 +44,12 @@ app.post('/signup', async (req, res) => {
             user_id: generatedUserId, 
         }
 
+        const dataSocials = {
+            user_id: generatedUserId,
+        }
+
         const insertedUser = await users.insertOne(data)
+        const insertedUserSocials = await socials.insertOne(dataSocials)
         const insertedUserFilters = await filters.insertOne(dataFilters)
         const token = jwt.sign(insertedUser, sanitizedEmail, {
             expiresIn: 60 * 24,
@@ -154,6 +160,7 @@ app.put('/user', async (req, res) => {
         const database = client.db('data')
         const users = database.collection('users')
         const filters = database.collection('filters')
+        const socials = database.collection('socials')
         const query = { user_id: formData.user_id }
         const updateDocument = { 
             $set: {
@@ -176,6 +183,16 @@ app.put('/user', async (req, res) => {
                 age_max: formData.age_max
             }
         }
+
+        const updateDocumentSocials = {
+            $set: {
+                insta: formData.insta,
+                snap: formData.snap,
+                facebook: formData.facebook
+            }
+        }
+
+        const insertedUserSocials = await socials.updateOne(query, updateDocumentSocials)
         const insertedUser = await users.updateOne(query, updateDocument)
         const insertedUserFilters = await filters.updateOne(query, updateDocumentFilter)
         res.send(insertedUser)
@@ -245,6 +262,7 @@ app.put('/userUp', async (req, res) => {
         const database = client.db('data')
         const users = database.collection('users')
         const filters = database.collection('filters')
+        const socials = database.collection('socials')
         const query = { user_id: formData.user_id }
         const updateDocument = { 
             $set: {
@@ -268,7 +286,16 @@ app.put('/userUp', async (req, res) => {
             }
         }
 
+        const updateDocumentSocials = {
+            $set: {
+                insta: formData.insta,
+                snap: formData.snap,
+                facebook: formData.facebook
+            }
+        }
+
         const insertedUser = await users.updateOne(query, updateDocument)
+        const insertedUserSocials = await socials.updateOne(query, updateDocumentSocials)
         const insertedUserFilters = await filters.updateOne(query, updateDocumentFilter)
         res.send(insertedUser)
     } finally {

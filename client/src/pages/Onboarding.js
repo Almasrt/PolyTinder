@@ -24,6 +24,9 @@ const Onboarding = () => {
         age: '',
         age_min: '',
         age_max: '',
+        insta: '', 
+        snap: '', 
+        facebook: '',
         matches: []
     })
     
@@ -58,7 +61,7 @@ const Onboarding = () => {
           <h2>CREATE ACCOUNT</h2>
           <form onSubmit={handleSubmit}>
               <section>
-                <label htmlFor="first_name">First Name</label>
+                <label htmlFor="first_name">First Name *</label>
                 <input 
                     id="first_name"
                     type="text"
@@ -68,7 +71,7 @@ const Onboarding = () => {
                     value={formData.first_name}
                     onChange={handleChange}/>
                 
-                <label>Birthday</label>
+                <label>Birthday *</label>
                 <div className="multiple-input-container">
                     <input 
                         id="dob_day"
@@ -95,7 +98,7 @@ const Onboarding = () => {
                         value={formData.dob_year}
                         onChange={handleChange}/>
                         </div>
-                        <label htmlFor="age">Age</label>
+                        <label htmlFor="age">Age *</label>
                     <input 
                         id="age"
                         type="number"
@@ -105,7 +108,7 @@ const Onboarding = () => {
                         value={formData.age}
                         onChange={handleChange}/>
 
-                    <label>Gender</label>
+                    <label>Gender *</label>
                     <div className="multiple-input-container">
                         <input 
                             id="woman-gender-identity"
@@ -168,7 +171,7 @@ const Onboarding = () => {
                             checked={formData.gender_interest === 'everyone'}/>
                     <label htmlFor="everyone-gender-interest">Everyone</label>
                     </div>
-                    <label>Age Filters</label>
+                    <label>Age Filters *</label>
                         <div className="multiple-input-container">
                         <input 
                             id="age_min"
@@ -185,7 +188,7 @@ const Onboarding = () => {
                             value={formData.age_max}
                             onChange={handleChange}/>
                             </div>
-                    <label htmlFor="about">About me</label>
+                    <label htmlFor="about">About me *</label>
                     <input 
                             id="about"
                             type="text"
@@ -194,11 +197,44 @@ const Onboarding = () => {
                             onChange={handleChange}
                             required={true}
                             placeholder="I like playing candy crush..."/>
-                    <input type="submit"/>
+                    <label>Social Networks</label>
+                    <div className="socials-input-container">
+                        <div className="social">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1936/1936319.png" alt="icone instagram"/>
+                        <input 
+                            id="insta"
+                            type="text"
+                            name="insta"
+                            placeholder="@insta"
+                            value={formData.insta}
+                            onChange={handleChange}/>
+                            </div>
+                        <div className="social">
+                        <img src="https://cdn-icons-png.flaticon.com/512/174/174870.png" alt="icone snapchat"/>
+                        <input 
+                            id="snap"
+                            type="text"
+                            name="snap"
+                            placeholder="@snap"
+                            value={formData.snap}
+                            onChange={handleChange}/>
+                            </div>
+                        <div className="social">
+                        <img src="https://cdn-icons.flaticon.com/png/512/665/premium/665209.png?token=exp=1647292707~hmac=80b9af4fab0b8c6c43a88fbd5142dfbd" alt="icone facebook"/>
+                        <input 
+                            id="facebook"
+                            type="text"
+                            name="facebook"
+                            placeholder="@facebook"
+                            value={formData.facebook}
+                            onChange={handleChange}/>
+                            </div>
+                        </div>
+                        <input type="submit"/>
               </section>
               <section>
-                <label htmlFor="about">Profile photo</label>
-                <input 
+                <label htmlFor="about">Profile photo *</label>
+                    <input 
                             id="url"
                             type="url"
                             name="url"
