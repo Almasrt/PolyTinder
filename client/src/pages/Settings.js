@@ -5,33 +5,35 @@ import "../assets/index.css"
 import { useCookies } from 'react-cookie'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
-const Onboarding = () => {
+
+const Settings = () => {
     let navigate = useNavigate()
     const [cookies, setCookie, removeCookie] = useCookies(['user'])
+    const [user, setUser] = useState(null)
+    const userId = cookies.UserId
 
-    const [formData, setFormData] = useState({
-        user_id: cookies.UserId,
-        first_name: '',
-        dob_day: '',
-        dob_month: '',
-        dob_year: '',
-        show_gender: false,
-        gender_identity: 'woman',
-        gender_interest: 'woman', 
-        url: '',
-        about: '',
-        age: '',
-        age_min: '',
-        age_max: '',
-        matches: []
-    })
+
+    const getUser = async () => {
+        try {
+          const response = await axios.get('http://localhost:9000/user', {
+            params: {userId}
+          })
+          setUser(response.data)
+          
+        } catch (error) {
+          console.log(error)
+        }
+      }
     
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.put('http://localhost:9000/user', {formData})
+            const response = await axios.put('http://localhost:9000/userUp', {user})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {
@@ -43,19 +45,55 @@ const Onboarding = () => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         const name = e.target.name;
 
-        setFormData((prevState) => ({
+        setUser((prevState) => ({
             ...prevState,
             [name] : value
         }))
+
     }
 
+    const ConfirmDelete = () => {
+        confirmAlert({
+            title: 'Confirm to delete',
+            message: 'Are you sure you want to delete your account ?',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => deleteAccount()
+              },
+              {
+                label: 'No',
+                onClick: () => onclose
+              }
+            ]
+          });
+    }
+    const deleteAccount = async () => {
+        try {
+            const response = axios.delete('http://localhost:9000/userDel', {
+                params : {user_id : user.user_id}
+            }) 
+            removeCookie('UserId', cookies.UserId)
+            removeCookie('AuthToken', cookies.AuthToken)
+            navigate('/')
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    
+
+    useEffect(() => {
+        getUser()
+    }, [])
     
     
     return (
-        <div>
+    <div>
         <Nav setShowModal={() => {}} showModal={false}/>
       <div className="onboarding">
-          <h2>CREATE ACCOUNT</h2>
+          <h2>EDIT ACCOUNT</h2>
+          <>
+          {user &&
           <form onSubmit={handleSubmit}>
               <section>
                 <label htmlFor="first_name">First Name</label>
@@ -63,9 +101,8 @@ const Onboarding = () => {
                     id="first_name"
                     type="text"
                     name="first_name"
-                    placeholder="first name"
-                    required={true}
-                    value={formData.first_name}
+                    placeholder={user.first_name}
+                    value={user.first_name}
                     onChange={handleChange}/>
                 
                 <label>Birthday</label>
@@ -74,36 +111,24 @@ const Onboarding = () => {
                         id="dob_day"
                         type="number"
                         name="dob_day"
-                        placeholder="DD"
-                        required={true}
-                        value={formData.dob_day}
+                        placeholder={user.dob_day}
+                        value={user.dob_day}
                         onChange={handleChange}/>
                     <input 
                         id="dob_month"
                         type="number"
                         name="dob_month"
-                        placeholder="MM"
-                        required={true}
-                        value={formData.dob_month}
+                        placeholder={user.dob_month}
+                        value={user.dob_month}
                         onChange={handleChange}/>
                     <input 
                         id="dob_year"
                         type="number"
                         name="dob_year"
-                        placeholder="YYYY"
-                        required={true}
-                        value={formData.dob_year}
+                        placeholder={user.dob_year}
+                        value={user.dob_year}
                         onChange={handleChange}/>
                         </div>
-                        <label htmlFor="age">Age</label>
-                    <input 
-                        id="age"
-                        type="number"
-                        name="age"
-                        placeholder="age"
-                        required={true}
-                        value={formData.age}
-                        onChange={handleChange}/>
 
                     <label>Gender</label>
                     <div className="multiple-input-container">
@@ -113,7 +138,7 @@ const Onboarding = () => {
                             name="gender_identity"
                             value={"woman"}
                             onChange={handleChange}
-                            checked={formData.gender_identity === 'woman'}/>
+                            checked={user.gender_identity === 'woman'}/>
                         <label htmlFor="woman-gender-identity">Woman</label>
                         <input 
                             id="man-gender-identity"
@@ -121,7 +146,7 @@ const Onboarding = () => {
                             name="gender_identity"
                             value={"man"}
                             onChange={handleChange}
-                            checked={formData.gender_identity === 'man'}/>
+                            checked={user.gender_identity === 'man'}/>
                         <label htmlFor="man-gender-identity">Man</label>
                         <input 
                             id="more-gender-identity"
@@ -129,7 +154,7 @@ const Onboarding = () => {
                             name="gender_identity"
                             value={"more"}
                             onChange={handleChange}
-                            checked={formData.gender_identity === 'more'}/>
+                            checked={user.gender_identity === 'more'}/>
                         <label htmlFor="more-gender-identity">More</label>
                     </div>
 
@@ -139,7 +164,7 @@ const Onboarding = () => {
                             type="checkbox"
                             name="show_gender"
                             onChange={handleChange}
-                            checked={formData.show_gender}/>
+                            checked={user.show_gender}/>
 
                     <label>Show me</label>
                     <div className="multiple-input-container">
@@ -149,7 +174,7 @@ const Onboarding = () => {
                             name="gender_interest"
                             value={"woman"}
                             onChange={handleChange}
-                            checked={formData.gender_interest === 'woman'}/>
+                            checked={user.gender_interest === 'woman'}/>
                         <label htmlFor="woman-gender-interest">Woman</label>
                         <input 
                             id="man-gender-interest"
@@ -157,7 +182,7 @@ const Onboarding = () => {
                             name="gender_interest"
                             value={"man"}
                             onChange={handleChange}
-                            checked={formData.gender_interest === 'man'}/>
+                            checked={user.gender_interest === 'man'}/>
                         <label htmlFor="man-gender-interest">Man</label>
                         <input 
                             id="everyone-gender-interest"
@@ -165,9 +190,9 @@ const Onboarding = () => {
                             name="gender_interest"
                             value={"everyone"}
                             onChange={handleChange}
-                            checked={formData.gender_interest === 'everyone'}/>
-                    <label htmlFor="everyone-gender-interest">Everyone</label>
-                    </div>
+                            checked={user.gender_interest === 'everyone'}/>
+                        <label htmlFor="everyone-gender-interest">Everyone</label>
+                        </div>
                     <label>Age Filters</label>
                         <div className="multiple-input-container">
                         <input 
@@ -175,14 +200,14 @@ const Onboarding = () => {
                             type="number"
                             name="age_min"
                             placeholder="age min"
-                            value={formData.age_min}
+                            value={user.age_min}
                             onChange={handleChange}/>
                         <input 
                             id="age_max"
                             type="number"
                             name="age_max"
                             placeholder="age max"
-                            value={formData.age_max}
+                            value={user.age_max}
                             onChange={handleChange}/>
                             </div>
                     <label htmlFor="about">About me</label>
@@ -190,7 +215,7 @@ const Onboarding = () => {
                             id="about"
                             type="text"
                             name="about"
-                            value={formData.about}
+                            value={user.about}
                             onChange={handleChange}
                             required={true}
                             placeholder="I like playing candy crush..."/>
@@ -202,17 +227,21 @@ const Onboarding = () => {
                             id="url"
                             type="url"
                             name="url"
-                            onChange={handleChange}
-                            required={true}/>
+                            value={user.url}
+                            onChange={handleChange}/>
 
                 <div className="photo-container">
-                    {formData.url && <img src={formData.url} alt="profile pic preview"/>}
+                    {<img src={user.url} alt="profile pic preview"/>}
                     </div>
               </section>
-          </form>
+          </form>}
+          <div>
+            <button className="delete-button" onClick={ConfirmDelete}>Delete Account</button>
+          </div>
+          </>
       </div>
       </div>
     );
   }
   
-  export default Onboarding;
+  export default Settings;

@@ -2,10 +2,12 @@ import TinderCard from 'react-tinder-card';
 import useState from 'react-hook-use-state';
 import "../assets/DashBoard.css"
 import "../assets/index.css"
+import SettingsIcon from '@mui/icons-material/Settings';
 import ChatContainer from "../Components/ChatContainer"
 import axios from 'axios';
 import { useCookies } from 'react-cookie'
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 
 
 const Dashboard = () => {
@@ -13,6 +15,8 @@ const Dashboard = () => {
   const [user, setUser] = useState(null)
   const [genderedUsers, setGenderedUsers] = useState(null)
   const [cookies, setCookie, removeCookie] = useCookies(['user'])
+
+  let navigate = useNavigate()
 
   const outOfFrame = (name) => {
     console.log(name + ' left the screen!')
@@ -73,6 +77,10 @@ const Dashboard = () => {
     setLastDirection(direction)
   }
 
+  const handleClick = () => {
+    navigate('/settings')
+  }
+
   const matchedUserIds = user?.matches.map(({user_id}) => user_id)
   const filteredGenderedUsers = genderedUsers?.filter(
     genderedUser => !matchedUserIds.includes(genderedUser.user_id)
@@ -85,6 +93,9 @@ const Dashboard = () => {
     <div className="dashboard">
       <ChatContainer user={user}/>
       <div className="dashboard__swipe-container">
+        <div className="settings-button">
+          <SettingsIcon onClick={handleClick}/>
+        </div>
         <div className="dashboard__card-container">
           {filteredGenderedUsers?.map((genderedUser) =>
           <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}>

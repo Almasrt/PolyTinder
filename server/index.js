@@ -26,6 +26,7 @@ app.post('/signup', async (req, res) => {
         await client.connect()
         const database = client.db('data')
         const users = database.collection('users')
+        const filters = database.collection('filters')
 
         const existingUser = await users.findOne({email})
         if (existingUser) {
@@ -38,7 +39,12 @@ app.post('/signup', async (req, res) => {
             hashed_password: hashedPassword
         }
 
+        const dataFilters = {
+            user_id: generatedUserId, 
+        }
+
         const insertedUser = await users.insertOne(data)
+        const insertedUserFilters = await filters.insertOne(dataFilters)
         const token = jwt.sign(insertedUser, sanitizedEmail, {
             expiresIn: 60 * 24,
         })
@@ -147,6 +153,7 @@ app.put('/user', async (req, res) => {
         await client.connect()
         const database = client.db('data')
         const users = database.collection('users')
+        const filters = database.collection('filters')
         const query = { user_id: formData.user_id }
         const updateDocument = { 
             $set: {
@@ -159,10 +166,18 @@ app.put('/user', async (req, res) => {
                 gender_interest: formData.gender_interest, 
                 url: formData.url, 
                 about: formData.about, 
+                age: formData.age,
                 matches: formData.matches
             }
         }
+        const updateDocumentFilter = {
+            $set: {
+                age_min: formData.age_min,
+                age_max: formData.age_max
+            }
+        }
         const insertedUser = await users.updateOne(query, updateDocument)
+        const insertedUserFilters = await filters.updateOne(query, updateDocumentFilter)
         res.send(insertedUser)
     } finally {
         await client.close()
@@ -221,6 +236,65 @@ app.post('/message', async (req, res) => {
         await client.close() 
     }
 })
+
+app.put('/userUp', async (req, res) => {
+    const client = new MongoClient(uri)
+    const formData = req.body.user
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+        const filters = database.collection('filters')
+        const query = { user_id: formData.user_id }
+        const updateDocument = { 
+            $set: {
+                first_name: formData.first_name, 
+                dob_day: formData.dob_day,
+                dob_month: formData.dob_month,
+                dob_year: formData.dob_year, 
+                show_gender: formData.show_gender, 
+                gender_identity:formData.gender_identity, 
+                gender_interest: formData.gender_interest, 
+                url: formData.url, 
+                about: formData.about, 
+                matches: formData.matches
+            }
+        }
+
+        const updateDocumentFilter = {
+            $set: {
+                age_min: formData.age_min,
+                age_max: formData.age_max
+            }
+        }
+
+        const insertedUser = await users.updateOne(query, updateDocument)
+        const insertedUserFilters = await filters.updateOne(query, updateDocumentFilter)
+        res.send(insertedUser)
+    } finally {
+        await client.close()
+    }
+})
+
+app.delete('/userDel', async (req, res) => {
+    const client = new MongoClient(uri)
+    const userId = req.query
+    console.log("heyyy")
+    console.log(userId)
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+        const deleteUser = await users.deleteOne(userId)
+        console.log(deleteUser)
+        res.send(deleteUser)
+
+    } finally {
+        await client.close()
+    }
+})
+
+
 
 
 

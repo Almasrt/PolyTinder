@@ -43,3 +43,13 @@
     margin: 15px;
     color: #fff;
 }
+
+.settings-button {
+    color: #fe3872;
+    background-color: white;
+    font-size: 18px;
+    padding: 9px 10px;
+    border-radius: 18px;
+    border: none;
+    margin: 10px
+}

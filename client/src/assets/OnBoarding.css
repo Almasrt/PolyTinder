@@ -35,7 +35,7 @@
 
 .onboarding form .multiple-input-container input{
     margin-right: 10px;
-    width: 70%;
+    width: 90%;
 }
 
 .onboarding form .multiple-input-container label {
@@ -44,6 +44,10 @@
     border-radius: 10px;
     transition: all 0.3s;
     margin-right: 10px;
+}
+
+#age{
+    width: 20%
 }
 
 .onboarding form input[type="radio"] {
