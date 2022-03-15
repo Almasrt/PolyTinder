@@ -29,10 +29,25 @@ const Onboarding = () => {
         facebook: '',
         matches: []
     })
+
+    const getAge = () => {
+        var today = new Date();
+        var age = today.getFullYear() - formData.dob_year;
+        var m = today.getMonth() - formData.dob_month;
+        
+        if (m < 0 || (m === 0 && today.getDate() < formData.dob_day)) {
+            age --;
+        }
+        return age;
+    }
     
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        const userAge = getAge()
+
+        formData.age = userAge
+
         try {
             const response = await axios.put('http://localhost:9000/user', {formData})
             const success = response.status === 200
@@ -98,16 +113,6 @@ const Onboarding = () => {
                         value={formData.dob_year}
                         onChange={handleChange}/>
                         </div>
-                        <label htmlFor="age">Age *</label>
-                    <input 
-                        id="age"
-                        type="number"
-                        name="age"
-                        placeholder="age"
-                        required={true}
-                        value={formData.age}
-                        onChange={handleChange}/>
-
                     <label>Gender *</label>
                     <div className="multiple-input-container">
                         <input 

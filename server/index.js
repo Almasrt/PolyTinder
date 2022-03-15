@@ -174,6 +174,9 @@ app.put('/user', async (req, res) => {
                 url: formData.url, 
                 about: formData.about, 
                 age: formData.age,
+                snap: formData.snap,
+                insta: formData.insta,
+                facebook: formData.facebook,
                 matches: formData.matches
             }
         }
@@ -275,6 +278,7 @@ app.put('/userUp', async (req, res) => {
                 gender_interest: formData.gender_interest, 
                 url: formData.url, 
                 about: formData.about, 
+                age: formData.age,
                 matches: formData.matches
             }
         }
@@ -306,12 +310,14 @@ app.put('/userUp', async (req, res) => {
 app.delete('/userDel', async (req, res) => {
     const client = new MongoClient(uri)
     const userId = req.query
-    console.log("heyyy")
-    console.log(userId)
     try {
         await client.connect()
         const database = client.db('data')
         const users = database.collection('users')
+        const socials = database.collection('socials')
+        const filters = database.collection('filters')
+        const deleteFilters = await filters.deleteOne(userId)
+        const deleteSocials = await socials.deleteOne(userId)
         const deleteUser = await users.deleteOne(userId)
         console.log(deleteUser)
         res.send(deleteUser)

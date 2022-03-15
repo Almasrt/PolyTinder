@@ -17,6 +17,7 @@ const Settings = () => {
     const userId = cookies.UserId
 
 
+
     const getUser = async () => {
         try {
           const response = await axios.get('http://localhost:9000/user', {
@@ -32,6 +33,10 @@ const Settings = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        const userAge = getAge()
+
+        user.age = userAge
+
         try {
             const response = await axios.put('http://localhost:9000/userUp', {user})
             const success = response.status === 200
@@ -41,9 +46,24 @@ const Settings = () => {
         }
     }
 
+    const getAge = () => {
+        var today = new Date();
+        var age = today.getFullYear() - user.dob_year;
+        var m = (today.getMonth()+1) - user.dob_month;
+        if (m < 0 || (m === 0 && today.getDate() < user.dob_day)) {
+            age --;
+        }
+        console.log(today.getMonth())
+        console.log(age)
+        console.log(m)
+        return age;
+    }
+
     const handleChange = (e) => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         const name = e.target.name;
+
+        console.log(e.target.name)
 
         setUser((prevState) => ({
             ...prevState,
