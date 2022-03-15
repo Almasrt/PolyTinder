@@ -2,11 +2,11 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import "../assets/Premium.css"
 import "../assets/index.css"
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Premium = ({setShowPremiumModal, userId}) => {
-    let likers = [];
 
+    const [likers, setLikers] = useState([]);
     const handleClick = () => {
         setShowPremiumModal(false)
     };
@@ -18,8 +18,7 @@ const Premium = ({setShowPremiumModal, userId}) => {
           const response = await axios.get('http://localhost:9000/premium-list', {
             params: { userId: userId }
           })
-          
-          likers = response.data
+          setLikers(response.data);
 
         } catch (error) {
           console.log(error)
@@ -31,7 +30,7 @@ const Premium = ({setShowPremiumModal, userId}) => {
     
       useEffect(() => {
         getLikers()
-    }, [likers])
+    },[])
 
     return (
         <div className="premium-modal">
