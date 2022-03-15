@@ -19,6 +19,7 @@ const Onboarding = () => {
         show_gender: false,
         gender_identity: 'woman',
         gender_interest: 'woman', 
+        isPremium: '',
         url: '',
         about: '',
         age: '',
@@ -33,7 +34,7 @@ const Onboarding = () => {
     const getAge = () => {
         var today = new Date();
         var age = today.getFullYear() - formData.dob_year;
-        var m = (today.getMonth()+1) - user.dob_month;
+        var m = (today.getMonth()+1) - formData.dob_month;
         
         if (m < 0 || (m === 0 && today.getDate() < formData.dob_day)) {
             age --;
@@ -47,6 +48,7 @@ const Onboarding = () => {
         const userAge = getAge()
 
         formData.age = userAge
+        formData.isPremium = 'false'
 
         try {
             const response = await axios.put('http://localhost:9000/user', {formData})

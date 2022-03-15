@@ -17,6 +17,7 @@ const MatchesDisplay = ({ matches, setclickedUser }) => {
                 params: {userIds: JSON.stringify(matchedUserIds)}
             })
             setMatchedProfiles(response.data)
+            
         } catch (error) {
             console.log(error)
         }

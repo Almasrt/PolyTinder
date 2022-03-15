@@ -1,0 +1,25 @@
+.premium-modal {
+    z-index:1;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed;
+    top: 10%;
+	bottom: 10%;
+	right: 10%;
+	left: 10%;
+    transition: transform .2s;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    overflow: hidden;
+    color:black
+}
+
+.premium-modal h2 {
+    padding-left: 25px;
+}
+
+.premium-modal__close-icon {
+    float: right;
+}

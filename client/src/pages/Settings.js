@@ -87,12 +87,13 @@ const Settings = () => {
     }
     const deleteAccount = async () => {
         try {
-            const response = axios.delete('http://localhost:9000/userDel', {
+            const response = await axios.delete('http://localhost:9000/userDel', {
                 params : {user_id : user.user_id}
             }) 
             removeCookie('UserId', cookies.UserId)
             removeCookie('AuthToken', cookies.AuthToken)
-            navigate('/')
+            const success = response.status === 200
+            if (success) navigate('/')
         } catch (err) {
             console.log(err)
         }

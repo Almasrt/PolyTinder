@@ -327,6 +327,32 @@ app.delete('/userDel', async (req, res) => {
     }
 })
 
+app.get('/premium-list', async (req, res) => {
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+        let foundUsers = []
+        
+        const allUsers = await users.find().toArray()
+        for (i in allUsers) {
+            for (j in allUsers[i].matches) {
+                const likedUserId = allUsers[i].matches[j].user_id
+                const liker = allUsers[i]
+                if(likedUserId === userId){
+                    foundUsers.push(liker)
+                }
+            }
+        }
+        console.log(foundUsers)
+        res.send(foundUsers)
+    }
+    finally{
+        await client.close()
+    }
+})
 
 
 
