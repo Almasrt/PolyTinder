@@ -53,9 +53,6 @@ const Settings = () => {
         if (m < 0 || (m === 0 && today.getDate() < user.dob_day)) {
             age --;
         }
-        console.log(today.getMonth())
-        console.log(age)
-        console.log(m)
         return age;
     }
 
