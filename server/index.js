@@ -37,7 +37,8 @@ app.post('/signup', async (req, res) => {
         const data = {
             user_id: generatedUserId,
             email: sanitizedEmail, 
-            hashed_password: hashedPassword
+            hashed_password: hashedPassword,
+            isPremium: false
         }
 
         const dataFilters = {
@@ -70,14 +71,19 @@ app.post('/login', async (req, res) => {
         const users = database.collection('users')
 
         const user = await users.findOne({email})
-        const correctPassword = await bcrypt.compare(password, user.hashed_password)
-        if (user && correctPassword) {
-            const token = jwt.sign(user, email, {
-                expiresIn: 60 * 24
-            })
-            res.status(201).json({token, userId: user.user_id})
+        if (user === null){
+            res.status(408).send('Invalid credentials')
         }
-        res.status(408).send('Invalid credentials')
+        else {
+            const correctPassword = await bcrypt.compare(password, user.hashed_password)
+            if (user && correctPassword) {
+                const token = jwt.sign(user, email, {
+                    expiresIn: 60 * 24
+                })
+                res.status(201).json({token, userId: user.user_id})
+            }
+        }
+        
     } catch (err) {
         console.log(err)
     }
@@ -346,7 +352,6 @@ app.get('/premium-list', async (req, res) => {
                 }
             }
         }
-        console.log(foundUsers)
         res.send(foundUsers)
     }
     finally{

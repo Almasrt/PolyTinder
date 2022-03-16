@@ -19,7 +19,6 @@ const Onboarding = () => {
         show_gender: false,
         gender_identity: 'woman',
         gender_interest: 'woman', 
-        isPremium: '',
         url: '',
         about: '',
         age: '',
@@ -48,7 +47,6 @@ const Onboarding = () => {
         const userAge = getAge()
 
         formData.age = userAge
-        formData.isPremium = 'false'
 
         try {
             const response = await axios.put('http://localhost:9000/user', {formData})

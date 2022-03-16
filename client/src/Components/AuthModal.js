@@ -28,7 +28,7 @@ const AuthModal = ( {setShowModal, isSignUp}) => {
             }
             
             const response = await axios.post(`http://localhost:9000/${isSignUp ? 'signup' : 'login'}`, {email, password})
-            
+            console.log("hhhh")
             setCookie('AuthToken', response.data.token)
             setCookie('UserId', response.data.userId)
 
@@ -37,9 +37,11 @@ const AuthModal = ( {setShowModal, isSignUp}) => {
             if (success && isSignUp) navigate('/onboarding')
             if (success && !isSignUp) navigate('/dashboard')
 
+
             window.location.reload()
             
         } catch (error) {
+            setError("Invalid Credentials")
             console.log(error)
         }
     };

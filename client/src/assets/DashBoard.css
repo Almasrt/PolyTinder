@@ -19,23 +19,20 @@
 .dashboard__card-container {
     width: 400px;
     height: 650px;
+    display: flex;
 }
 
 .card {
     background-color: #fff;
     width: 400px;
     height: 650px;
-    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.30);
+    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.20);
     border-radius: 30px;
     background-size: cover;
     background-position: center;
 }
 
-.swipe-info{
-    position: absolute;
-    bottom: 0;
-    padding: 50px;
-}
+
   
 .card h3 {
     position: absolute;
@@ -44,7 +41,14 @@
     color: #fff;
 }
 
+.swipe-info {
+    position: absolute;
+    padding: 160px;
+    padding-top: 670px;
+}
+
 .settings-button {
+    position: absolute;
     color: #fe3872;
     background-color: white;
     font-size: 18px;
@@ -52,4 +56,12 @@
     border-radius: 18px;
     border: none;
     margin: 10px
+}
+
+.return-button {
+    color: #fe3872;
+    font-size: 18px;
+    padding: 20px;
+    border-radius: 18px;
+    border: none;
 }

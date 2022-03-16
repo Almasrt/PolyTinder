@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Premium from '../Components/Premium';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 
 const Dashboard = () => {
@@ -92,7 +93,7 @@ const Dashboard = () => {
   const filteredGenderedUsers = genderedUsers?.filter(
     genderedUser => !matchedUserIds.includes(genderedUser.user_id)
     )
-    const handlePremiumClick = () => {
+    const handleReturnClick = () => {
       if(lastUser !== null){
         if(lastDirection === 'left'){
           setgoBack(true)
@@ -100,6 +101,10 @@ const Dashboard = () => {
       }
       else{
       }
+    }
+
+    const handlePremiumClick = () => {
+      setShowPremiumModal(true)
     }
     
     return (
@@ -129,8 +134,10 @@ const Dashboard = () => {
             <div style={{ backgroundImage: 'url(' + lastUser?.url + ')' }} className='card'>
               <h3>{lastUser?.first_name}</h3>
             </div>
-          </TinderCard>}            
+          </TinderCard>}
+          
         <div className="swipe-info">
+        {user.isPremium && <KeyboardReturnIcon onClick={handleReturnClick} className="return-button"/> }
             {lastDirection ? <p>You swiped {lastDirection} !</p> : <p/>}
         </div>
         </div>

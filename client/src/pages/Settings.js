@@ -1,7 +1,8 @@
 import useState from 'react-hook-use-state';
 import Nav from '../Components/Nav';
 import "../assets/OnBoarding.css";
-import "../assets/index.css"
+import "../assets/index.css";
+import "../assets/Home.css"
 import { useCookies } from 'react-cookie'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
