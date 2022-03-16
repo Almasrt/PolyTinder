@@ -23,7 +23,6 @@ const Dashboard = () => {
   const [goBack, setgoBack] = useState(false)
 
   let navigate = useNavigate()
-
   
 
   const userId = cookies.UserId
@@ -121,7 +120,7 @@ const Dashboard = () => {
         {showPremiumModal && <div className="premium-modal">
           <Premium setShowPremiumModal={setShowPremiumModal} userId={userId}/>
           </div>}
-          {!goBack && 
+          
           <div> {filteredGenderedUsers?.map((genderedUser) =>
           <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => setLastUser(genderedUser)}>
             <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>
@@ -129,7 +128,7 @@ const Dashboard = () => {
             </div>
           </TinderCard>
         )}
-        </div>}
+        </div>
         {goBack && <TinderCard className='swipe' preventSwipe={["up", "down"]} key={lastUser?.user_id} onSwipe={(dir) => swiped(dir, lastUser?.user_id)} onCardLeftScreen={() => setgoBack(false)}>
             <div style={{ backgroundImage: 'url(' + lastUser?.url + ')' }} className='card'>
               <h3>{lastUser?.first_name}</h3>
