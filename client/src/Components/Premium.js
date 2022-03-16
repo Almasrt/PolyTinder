@@ -3,13 +3,37 @@ import "../assets/Premium.css"
 import "../assets/index.css"
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import TinderCard from 'react-tinder-card';
 
 const Premium = ({setShowPremiumModal, userId}) => {
 
     const [likers, setLikers] = useState([]);
+    const [lastDirection, setLastDirection] = useState()
+    const [lastUser, setLastUser] = useState(null)
+
     const handleClick = () => {
         setShowPremiumModal(false)
     };
+
+    const swiped = (direction, swipedUser) => {
+    
+      if (direction === 'right') {
+        updateMatches(swipedUser)
+      }
+      setLastDirection(direction)
+    }
+
+    const updateMatches = async (matchedUser) => {
+      try {
+        const matchedUserId = matchedUser.user_id
+        axios.put('http://localhost:9000/addmatch', {
+          userId, 
+          matchedUserId
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
 
     const getLikers = async () => {
@@ -25,8 +49,6 @@ const Premium = ({setShowPremiumModal, userId}) => {
         }
       }
 
-      
-
     
       useEffect(() => {
         getLikers()
@@ -34,12 +56,19 @@ const Premium = ({setShowPremiumModal, userId}) => {
 
     return (
         <div className="premium-modal">
-            <div className="premium-modal__close-icon" 
-                onClick={handleClick}><CancelIcon fontSize="medium"/></div>
+          <div className="all-modal">
             <div className="matches-display">
+            
+              <h2>Your secret fans</h2>
                 {likers?.map((match) => (
-            <div>{match?.first_name}</div>
+            <TinderCard className='swipe' preventSwipe={["up", "down"]} key={match.user_id} onSwipe={(dir) => swiped(dir, match)} onCardLeftScreen={() => setLastUser(match)}>
+            <div style={{ backgroundImage: 'url(' + match.url + ')' }} className='card'>
+              <h3>{match.first_name}</h3>
+            </div>
+          </TinderCard>
         ))}
+          </div>
+          <CancelIcon onClick={handleClick} fontSize="medium"/>
         </div>
         </div>       
     )
