@@ -27,9 +27,9 @@ const Home = () => {
             <Nav authToken={authToken} setShowModal={setShowModal} showModal={showModal} setIsSignUp={setIsSignUp}/>
             <div className="home">
                 <h1 className="home__title">The Best Tinder</h1>
-                <IconButton onClick={handleClick} size='large'><button className="home__button" disabled={showModal}>
+                <IconButton onClick={handleClick} size='large' disabled={showModal}><div className="home__button" style={showModal? {opacity: 0.4}:null}>
                     {authToken ? 'Signout' : 'Create Account'}
-                </button></IconButton>
+                </div></IconButton>
 
                 {showModal && (
                     <AuthModal setShowModal={setShowModal} isSignUp={isSignUp}/>

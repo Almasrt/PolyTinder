@@ -15,15 +15,15 @@ import Premium from '../Components/Premium';
 const Dashboard = () => {
   const [lastDirection, setLastDirection] = useState()
   const [user, setUser] = useState(null)
+  const [lastUser, setLastUser] = useState(null)
   const [genderedUsers, setGenderedUsers] = useState(null)
   const [cookies, setCookie, removeCookie] = useCookies(['user'])
   const [showPremiumModal, setShowPremiumModal] = useState(false)
+  const [goBack, setgoBack] = useState(false)
 
   let navigate = useNavigate()
 
-  const outOfFrame = (name) => {
-    console.log(name + ' left the screen!')
-  }
+  
 
   const userId = cookies.UserId
 
@@ -47,6 +47,7 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error)
     }
+    console.log(lastUser)
   }
 
   useEffect(() => {
@@ -84,16 +85,22 @@ const Dashboard = () => {
     navigate('/settings')
   }
   
-  const handlePremiumClick = () => {
-    setShowPremiumModal(true);
-  }
+  
 
 
   const matchedUserIds = user?.matches.map(({user_id}) => user_id)
   const filteredGenderedUsers = genderedUsers?.filter(
     genderedUser => !matchedUserIds.includes(genderedUser.user_id)
     )
-    
+    const handlePremiumClick = () => {
+      if(lastUser !== null){
+        if(lastDirection === 'left'){
+          setgoBack(true)
+        }
+      }
+      else{
+      }
+    }
     
     return (
       <>
@@ -109,13 +116,20 @@ const Dashboard = () => {
         {showPremiumModal && <div className="premium-modal">
           <Premium setShowPremiumModal={setShowPremiumModal} userId={userId}/>
           </div>}
-          {filteredGenderedUsers?.map((genderedUser) =>
-          <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}>
+          {!goBack && 
+          <div> {filteredGenderedUsers?.map((genderedUser) =>
+          <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => setLastUser(genderedUser)}>
             <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>
               <h3>{genderedUser.first_name}</h3>
             </div>
           </TinderCard>
-        )}              
+        )}
+        </div>}
+        {goBack && <TinderCard className='swipe' preventSwipe={["up", "down"]} key={lastUser?.user_id} onSwipe={(dir) => swiped(dir, lastUser?.user_id)} onCardLeftScreen={() => setgoBack(false)}>
+            <div style={{ backgroundImage: 'url(' + lastUser?.url + ')' }} className='card'>
+              <h3>{lastUser?.first_name}</h3>
+            </div>
+          </TinderCard>}            
         <div className="swipe-info">
             {lastDirection ? <p>You swiped {lastDirection} !</p> : <p/>}
         </div>
