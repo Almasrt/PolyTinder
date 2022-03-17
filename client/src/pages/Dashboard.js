@@ -1,6 +1,7 @@
 import TinderCard from 'react-tinder-card';
 import useState from 'react-hook-use-state';
 import "../assets/DashBoard.css"
+import "../assets/BecomePremium.css"
 import "../assets/index.css"
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatContainer from "../Components/ChatContainer"
@@ -21,6 +22,8 @@ const Dashboard = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['user'])
   const [showPremiumModal, setShowPremiumModal] = useState(false)
   const [goBack, setgoBack] = useState(false)
+  const [code, setCode] = useState("")
+  const [error, setError] = useState(null);
 
   let navigate = useNavigate()
   
@@ -47,7 +50,6 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error)
     }
-    console.log(lastUser)
   }
 
   useEffect(() => {
@@ -84,6 +86,10 @@ const Dashboard = () => {
   const handleClick = () => {
     navigate('/settings')
   }
+
+  const handleBecomePremiumClick = () => {
+    navigate('/become-premium')
+  }
   
   
 
@@ -105,6 +111,23 @@ const Dashboard = () => {
     const handlePremiumClick = () => {
       setShowPremiumModal(true)
     }
+
+    const handleNewCodeSubmit = async (e) => {
+      e.preventDefault()
+      try {
+          setError("")
+          const response = await axios.post('http://localhost:9000/new-code', {code})
+          const success = response.status === 200
+          if(success) setCode('')
+      } catch (err) {
+          setError('A problem has occured')
+          console.log(err)
+      }
+  }
+
+  const handleNewCodeChange = (e) => {
+    setCode(e.target.value)
+}
     
     return (
       <>
@@ -113,7 +136,7 @@ const Dashboard = () => {
       <ChatContainer user={user}/>
       <div className="settings-button">
           <SettingsIcon onClick={handleClick}/>
-          <StarBorderIcon onClick={handlePremiumClick}/>
+          {user.status === "gold" && <StarBorderIcon onClick={handlePremiumClick}/>}
         </div>
       <div className="dashboard__swipe-container">
         <div className="dashboard__card-container">
@@ -136,13 +159,37 @@ const Dashboard = () => {
           </TinderCard>}
           
         <div className="swipe-info">
-        {user.isPremium && <KeyboardReturnIcon onClick={handleReturnClick} className="return-button"/> }
-            {lastDirection ? <p>You swiped {lastDirection} !</p> : <p/>}
+        {user.status !== "basic" &&  <KeyboardReturnIcon onClick={handleReturnClick} className="return-button"/> }
         </div>
         </div>
 
       </div>
     </div>}
+    {user && user.status !== "gold" && <div className="to-become-premium" onClick={handleBecomePremiumClick}>
+        <h3>
+          Click Here to Become Premium
+        </h3>
+      </div>}
+      {user && user.user_id === "a5ed3d2d-7603-45ea-9b6e-6bb11a3e42b0" && <div className="add-premium-code">
+        <h3>
+          Add a Premium Code :
+        </h3>
+        <div className="become-premium"> 
+            <form onSubmit={handleNewCodeSubmit}>
+            <section>
+                <input 
+                    id="code"
+                    type="text"
+                    name="code"
+                    placeholder="s1545"
+                    value={code}
+                    onChange={handleNewCodeChange}/>
+                    <input type="submit"/>
+                    </section>
+                </form>
+            </div>
+            <h3>{error}</h3>
+      </div>}
     </>
   );
 }

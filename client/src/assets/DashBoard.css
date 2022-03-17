@@ -56,12 +56,47 @@
 }
 
 .return-button {
-    
+    border: 1px solid #fe3872;
+    background-color: white;
     position: absolute;
+    padding: 5px;
     margin: 125px;
     margin-top: 620px;
     color: #fe3872;
     font-size: 18px;
     border-radius: 18px;
-    border: none;
+}
+
+.to-become-premium {
+    position: fixed;
+    height: 55px;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background: linear-gradient(45deg, #fe3872, #ff5948);
+   color: white;
+   text-align: center;
+}
+
+.to-become-premium h3 {
+    margin-left: 620px
+}
+
+.add-premium-code {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    height: 60px;
+    left: 0;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(45deg, #fe3872, #ff5948);
+    color: white;
+    text-align: center;
+    padding-left: 250px;
+}
+
+.add-premium-code form {
+    padding: 10px;
 }

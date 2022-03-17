@@ -38,7 +38,7 @@ app.post('/signup', async (req, res) => {
             user_id: generatedUserId,
             email: sanitizedEmail, 
             hashed_password: hashedPassword,
-            isPremium: false
+            status: "basic"
         }
 
         const dataFilters = {
@@ -355,6 +355,85 @@ app.get('/premium-list', async (req, res) => {
         res.send(foundUsers)
     }
     finally{
+        await client.close()
+    }
+})
+
+app.get('/verify-code', async (req, res) => {
+    const client = new MongoClient(uri)
+   
+    const clientCode = req.query.code
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const codes = database.collection('codes')
+        const query = { code: clientCode }
+        const codeFound = await codes.findOne(query)
+        res.send(codeFound)
+    } finally{
+        await client.close()
+    }
+})
+
+app.put('/change-status', async (req, res) => {
+    const client = new MongoClient(uri)
+    const newStatus = req.body.newUserStatus
+    const userId = req.body.userId
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+        const query = { user_id: userId }
+        const updateDocument = { 
+            $set: {
+                status: newStatus
+            }
+        }       
+        const updatedUser = await users.updateOne(query, updateDocument)
+        res.send(updatedUser)
+    } finally {
+        await client.close()
+    }
+})
+
+app.post('/new-code', async (req, res) => {
+    const client = new MongoClient(uri)
+    const newCode = req.body.code
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const codes = database.collection('codes')
+
+        const query = { code: newCode }
+        const foundCode = await codes.findOne(query)
+
+        if(foundCode !== null){
+            res.status(408).send("Code already added")
+        }
+        
+        else {
+            const silver = newCode.startsWith('s')
+            const gold = newCode.startsWith('g')
+            let newLevel = ""
+            if(silver){
+                newLevel = "silver"
+            }
+            else if(gold){
+                newLevel = "gold"
+            }
+            else{
+                res.status(408).send("Invalid code")
+            }
+
+            const data = {
+                code: newCode,
+                level: newLevel
+            }
+            const insertedCode = await codes.insertOne(data)
+            res.send(insertedCode)
+        }
+    } finally {
         await client.close()
     }
 })

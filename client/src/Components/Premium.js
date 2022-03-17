@@ -62,7 +62,7 @@ const Premium = ({setShowPremiumModal, userId}) => {
               <h2>Your secret fans</h2>
                 {likers?.map((match) => (
             <TinderCard className='swipe' preventSwipe={["up", "down"]} key={match.user_id} onSwipe={(dir) => swiped(dir, match)} onCardLeftScreen={() => setLastUser(match)}>
-            <div style={{ backgroundImage: 'url(' + match.url + ')' }} className='card'>
+            <div style={{ backgroundImage: 'url(' + match.url + ')' }} className='card-premium'>
               <h3>{match.first_name}</h3>
             </div>
           </TinderCard>

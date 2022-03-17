@@ -2,12 +2,12 @@
     z-index:1;
     position: fixed;
     padding: 20px;
-    top: 10%;
+    top: 2.5%;
 	bottom: 5%;
 	right: 10%;
-	left: 30%;
+	left: 47%;
     transition: transform .2s;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255);
     border-radius: 10px;
     text-align: center;
     color:black
@@ -42,7 +42,7 @@
     height: 650px;
 }
 
-.card {
+.card-premium {
     background-color: #fff;
     width: 400px;
     height: 650px;
@@ -50,4 +50,10 @@
     border-radius: 30px;
     background-size: cover;
     background-position: center;
+}
+.card-premium h3 {
+    position: absolute;
+    bottom: 0px;
+    margin: 15px;
+    color: #fff;
 }

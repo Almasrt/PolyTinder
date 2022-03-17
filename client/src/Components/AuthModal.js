@@ -22,6 +22,7 @@ const AuthModal = ( {setShowModal, isSignUp}) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
+            setError("")
             if(isSignUp && (password !== confirmPassword)) {
                 setError('Passwords need to match')
                 return 
@@ -41,7 +42,7 @@ const AuthModal = ( {setShowModal, isSignUp}) => {
             window.location.reload()
             
         } catch (error) {
-            setError("Invalid Credentials")
+            setError("A problem has occured")
             console.log(error)
         }
     };

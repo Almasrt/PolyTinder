@@ -235,7 +235,7 @@ const Settings = () => {
                             onChange={handleChange}/>
                             </div>
                         <div className="social">
-                        <img src="https://cdn-icons.flaticon.com/png/512/665/premium/665209.png?token=exp=1647292707~hmac=80b9af4fab0b8c6c43a88fbd5142dfbd" alt="icone facebook"/>
+                        <img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/facebook_icon_137647.png" alt="icone facebook"/>
                         <input 
                             id="facebook"
                             type="text"
