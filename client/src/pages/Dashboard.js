@@ -119,9 +119,6 @@ const Dashboard = () => {
   const totalyFilteredUsers = filteredGenderedUsers?.filter(
     genderedUser => ageFilteredUsersId.includes(genderedUser.user_id)
   )
-
-  console.log(filteredGenderedUsers)
-  console.log(totalyFilteredUsers)
     const handleReturnClick = () => {
       if(lastUser !== null){
         if(lastDirection === 'left'){

@@ -52,9 +52,6 @@ const Settings = () => {
         user.age = userAge
 
         try {
-            console.log(socials)
-            console.log(filters)
-            console.log(user)
             const response = await axios.put('http://localhost:9000/userUp', {user, socials, filters})
             const success = response.status === 200
             if (success) navigate('/dashboard')
@@ -81,7 +78,6 @@ const Settings = () => {
             ...prevState,
             [name] : value
         }))
-        console.log(user)
 
     }
 

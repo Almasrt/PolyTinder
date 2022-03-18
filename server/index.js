@@ -302,9 +302,6 @@ app.put('/userUp', async (req, res) => {
     const formData = req.body.user
     const formSocials = req.body.socials
     const formFilters = req.body.filters
-    console.log(formFilters)
-    console.log(formSocials)
-    console.log(formData)
     try {
         await client.connect()
         const database = client.db('data')
@@ -364,7 +361,6 @@ app.delete('/userDel', async (req, res) => {
         const deleteFilters = await filters.deleteOne(userId)
         const deleteSocials = await socials.deleteOne(userId)
         const deleteUser = await users.deleteOne(userId)
-        console.log(deleteUser)
         res.send(deleteUser)
 
     } finally {
