@@ -16,6 +16,7 @@ const Settings = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['user'])
     const [user, setUser] = useState(null)
     const userId = cookies.UserId
+    const authToken = cookies.AuthToken
 
 
 
@@ -108,7 +109,7 @@ const Settings = () => {
     
     return (
     <div>
-        <Nav setShowModal={() => {}} showModal={false}/>
+        <Nav authToken={authToken} setShowModal={() => {}} showModal={false}/>
       <div className="onboarding">
           <h2>EDIT ACCOUNT</h2>
           <>

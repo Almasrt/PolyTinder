@@ -22,8 +22,8 @@ const Onboarding = () => {
         url: '',
         about: '',
         age: '',
-        age_min: '',
-        age_max: '',
+        age_min: null,
+        age_max: null,
         insta: '', 
         snap: '', 
         facebook: '',
@@ -93,6 +93,8 @@ const Onboarding = () => {
                         type="number"
                         name="dob_day"
                         placeholder="DD"
+                        min="01"
+                        max="31"
                         required={true}
                         value={formData.dob_day}
                         onChange={handleChange}/>
@@ -101,6 +103,8 @@ const Onboarding = () => {
                         type="number"
                         name="dob_month"
                         placeholder="MM"
+                        min="01"
+                        max="12"
                         required={true}
                         value={formData.dob_month}
                         onChange={handleChange}/>
@@ -109,6 +113,8 @@ const Onboarding = () => {
                         type="number"
                         name="dob_year"
                         placeholder="YYYY"
+                        min="1960"
+                        max="2006"
                         required={true}
                         value={formData.dob_year}
                         onChange={handleChange}/>
@@ -183,6 +189,8 @@ const Onboarding = () => {
                             type="number"
                             name="age_min"
                             placeholder="age min"
+                            min="16"
+                            max="100"
                             value={formData.age_min}
                             onChange={handleChange}/>
                         <input 
@@ -190,6 +198,8 @@ const Onboarding = () => {
                             type="number"
                             name="age_max"
                             placeholder="age max"
+                            min="16"
+                            max="100"
                             value={formData.age_max}
                             onChange={handleChange}/>
                             </div>

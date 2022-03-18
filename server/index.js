@@ -71,6 +71,7 @@ app.post('/login', async (req, res) => {
         const users = database.collection('users')
 
         const user = await users.findOne({email})
+        
         if (user === null){
             res.status(408).send('Invalid credentials')
         }
@@ -105,6 +106,7 @@ app.get('/user', async (req, res) => {
         await client.close()
     }
 })
+
 
 app.get('/users', async (req, res) => {
     const client = new MongoClient(uri)
@@ -180,9 +182,6 @@ app.put('/user', async (req, res) => {
                 url: formData.url, 
                 about: formData.about, 
                 age: formData.age,
-                snap: formData.snap,
-                insta: formData.insta,
-                facebook: formData.facebook,
                 matches: formData.matches
             }
         }
@@ -434,6 +433,33 @@ app.post('/new-code', async (req, res) => {
             res.send(insertedCode)
         }
     } finally {
+        await client.close()
+    }
+})
+
+app.get('/age-filters', async (req, res) => {
+    
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const filters = database.collection('filters')
+        const users = database.collection('users')
+
+        const query = { user_id: { $eq : userId }}
+        const foundFilters = await filters.findOne(query)
+        const ageMax = Number(foundFilters.age_max)
+        const ageMin = Number(foundFilters.age_min)
+        query2 = { age: { $lte: ageMax, $gte: ageMin }}
+        
+        foundUsers = await users.find(query2)
+        
+        const foundUsersArray = await foundUsers.toArray()
+
+        res.send(foundUsersArray)
+    }
+    finally{
         await client.close()
     }
 })

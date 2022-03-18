@@ -23,7 +23,8 @@ const Dashboard = () => {
   const [showPremiumModal, setShowPremiumModal] = useState(false)
   const [goBack, setgoBack] = useState(false)
   const [code, setCode] = useState("")
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null)
+  const [ageFilteredUsers, setAgeFilteredUsers] = useState([])
 
   let navigate = useNavigate()
   
@@ -36,6 +37,20 @@ const Dashboard = () => {
         params: {userId}
       })
       setUser(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const getAgeFilteredUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/age-filters', {
+        params: {userId: userId}
+      })
+
+      setAgeFilteredUsers(response.data)
+      
     } catch (error) {
       console.log(error)
     }
@@ -58,6 +73,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user) {
+      getAgeFilteredUsers()
       getGenderedUsers()
     }
   }, [user])
@@ -95,9 +111,17 @@ const Dashboard = () => {
 
 
   const matchedUserIds = user?.matches.map(({user_id}) => user_id)
+  const ageFilteredUsersId = ageFilteredUsers?.map(({user_id}) => user_id)
   const filteredGenderedUsers = genderedUsers?.filter(
     genderedUser => !matchedUserIds.includes(genderedUser.user_id)
     )
+
+  const totalyFilteredUsers = filteredGenderedUsers?.filter(
+    genderedUser => ageFilteredUsersId.includes(genderedUser.user_id)
+  )
+
+  console.log(filteredGenderedUsers)
+  console.log(totalyFilteredUsers)
     const handleReturnClick = () => {
       if(lastUser !== null){
         if(lastDirection === 'left'){
@@ -131,7 +155,7 @@ const Dashboard = () => {
     
     return (
       <>
-    {user && filteredGenderedUsers &&
+    {user && totalyFilteredUsers &&
     <div className="dashboard">
       <ChatContainer user={user}/>
       <div className="settings-button">
@@ -144,7 +168,7 @@ const Dashboard = () => {
           <Premium setShowPremiumModal={setShowPremiumModal} userId={userId}/>
           </div>}
           
-          <div> {filteredGenderedUsers?.map((genderedUser) =>
+          <div> {totalyFilteredUsers?.map((genderedUser) =>
           <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => setLastUser(genderedUser)}>
             <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>
               <h3>{genderedUser.first_name}</h3>
