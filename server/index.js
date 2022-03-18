@@ -107,6 +107,41 @@ app.get('/user', async (req, res) => {
     }
 })
 
+app.get('/socials', async (req, res) => {
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const socials = database.collection('socials')
+
+        const query = { user_id: userId }
+        const user = await socials.findOne(query)
+        res.send(user)
+    } finally {
+        await client.close()
+    }
+})
+
+app.get('/filters', async (req, res) => {
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const filters = database.collection('filters')
+
+        const query = { user_id: userId }
+        const user = await filters.findOne(query)
+        res.send(user)
+    } finally {
+        await client.close()
+    }
+})
+
+
 
 app.get('/users', async (req, res) => {
     const client = new MongoClient(uri)
@@ -265,6 +300,11 @@ app.post('/message', async (req, res) => {
 app.put('/userUp', async (req, res) => {
     const client = new MongoClient(uri)
     const formData = req.body.user
+    const formSocials = req.body.socials
+    const formFilters = req.body.filters
+    console.log(formFilters)
+    console.log(formSocials)
+    console.log(formData)
     try {
         await client.connect()
         const database = client.db('data')
@@ -290,16 +330,16 @@ app.put('/userUp', async (req, res) => {
 
         const updateDocumentFilter = {
             $set: {
-                age_min: formData.age_min,
-                age_max: formData.age_max
+                age_min: formFilters.age_min,
+                age_max: formFilters.age_max
             }
         }
 
         const updateDocumentSocials = {
             $set: {
-                insta: formData.insta,
-                snap: formData.snap,
-                facebook: formData.facebook
+                insta: formSocials.insta,
+                snap: formSocials.snap,
+                facebook: formSocials.facebook
             }
         }
 

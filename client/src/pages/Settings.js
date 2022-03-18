@@ -15,6 +15,8 @@ const Settings = () => {
     let navigate = useNavigate()
     const [cookies, setCookie, removeCookie] = useCookies(['user'])
     const [user, setUser] = useState(null)
+    const [socials, setSocials] = useState(null)
+    const [filters, setFilters] = useState(null)
     const userId = cookies.UserId
     const authToken = cookies.AuthToken
 
@@ -26,6 +28,16 @@ const Settings = () => {
             params: {userId}
           })
           setUser(response.data)
+
+          const response1 = await axios.get('http://localhost:9000/socials', {
+                params: {userId}
+                })
+            setSocials(response1.data)
+
+            const response2 = await axios.get('http://localhost:9000/filters', {
+                params: {userId}
+                })
+            setFilters(response2.data)
           
         } catch (error) {
           console.log(error)
@@ -40,7 +52,10 @@ const Settings = () => {
         user.age = userAge
 
         try {
-            const response = await axios.put('http://localhost:9000/userUp', {user})
+            console.log(socials)
+            console.log(filters)
+            console.log(user)
+            const response = await axios.put('http://localhost:9000/userUp', {user, socials, filters})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {
@@ -62,9 +77,29 @@ const Settings = () => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         const name = e.target.name;
 
-        console.log(e.target.name)
-
         setUser((prevState) => ({
+            ...prevState,
+            [name] : value
+        }))
+        console.log(user)
+
+    }
+
+    const handleSocialChange = (e) => {
+        const value = e.target.value
+        const name = e.target.name
+        
+        setSocials((prevState) => ({
+            ...prevState,
+            [name] : value
+        }))
+    }
+
+    const handleFilterChange = (e) => {
+        const value = e.target.value
+        const name = e.target.name
+        
+        setFilters((prevState) => ({
             ...prevState,
             [name] : value
         }))
@@ -106,14 +141,13 @@ const Settings = () => {
         getUser()
     }, [])
     
-    
     return (
     <div>
         <Nav authToken={authToken} setShowModal={() => {}} showModal={false}/>
       <div className="onboarding">
           <h2>EDIT ACCOUNT</h2>
           <>
-          {user &&
+          {user && filters && socials &&
           <form onSubmit={handleSubmit}>
               <section>
                 <label htmlFor="first_name">First Name</label>
@@ -131,6 +165,8 @@ const Settings = () => {
                         id="dob_day"
                         type="number"
                         name="dob_day"
+                        min="01"
+                        max="31"
                         placeholder={user.dob_day}
                         value={user.dob_day}
                         onChange={handleChange}/>
@@ -138,6 +174,8 @@ const Settings = () => {
                         id="dob_month"
                         type="number"
                         name="dob_month"
+                        min="01"
+                        max="12"
                         placeholder={user.dob_month}
                         value={user.dob_month}
                         onChange={handleChange}/>
@@ -145,6 +183,8 @@ const Settings = () => {
                         id="dob_year"
                         type="number"
                         name="dob_year"
+                        min="1960"
+                        max="2006"
                         placeholder={user.dob_year}
                         value={user.dob_year}
                         onChange={handleChange}/>
@@ -213,6 +253,36 @@ const Settings = () => {
                             checked={user.gender_interest === 'everyone'}/>
                         <label htmlFor="everyone-gender-interest">Everyone</label>
                         </div>
+                        <label>Age Filters *</label>
+                        <div className="multiple-input-container">
+                        <input 
+                            id="age_min"
+                            type="number"
+                            name="age_min"
+                            placeholder="age min"
+                            min="16"
+                            max="100"
+                            value={filters.age_min}
+                            onChange={handleFilterChange}/>
+                        <input 
+                            id="age_max"
+                            type="number"
+                            name="age_max"
+                            placeholder="age max"
+                            min="16"
+                            max="100"
+                            value={filters.age_max}
+                            onChange={handleFilterChange}/>
+                            </div>
+                        <label htmlFor="about">About me *</label>
+                        <input 
+                            id="about"
+                            type="text"
+                            name="about"
+                            value={user.about}
+                            onChange={handleChange}
+                            required={true}
+                            placeholder="I like playing candy crush..."/>
                         <label>Social Networks</label>
                     <div className="socials-input-container">
                         <div className="social">
@@ -222,8 +292,8 @@ const Settings = () => {
                             type="text"
                             name="insta"
                             placeholder="@insta"
-                            value={user.insta}
-                            onChange={handleChange}/>
+                            value={socials.insta}
+                            onChange={handleSocialChange}/>
                             </div>
                         <div className="social">
                         <img src="https://cdn-icons-png.flaticon.com/512/174/174870.png" alt="icone snapchat"/>
@@ -232,8 +302,8 @@ const Settings = () => {
                             type="text"
                             name="snap"
                             placeholder="@snap"
-                            value={user.snap}
-                            onChange={handleChange}/>
+                            value={socials.snap}
+                            onChange={handleSocialChange}/>
                             </div>
                         <div className="social">
                         <img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/facebook_icon_137647.png" alt="icone facebook"/>
@@ -242,8 +312,8 @@ const Settings = () => {
                             type="text"
                             name="facebook"
                             placeholder="@facebook"
-                            value={user.facebook}
-                            onChange={handleChange}/>
+                            value={socials.facebook}
+                            onChange={handleSocialChange}/>
                             </div>
                         </div>
                     <input type="submit"/>
@@ -255,7 +325,7 @@ const Settings = () => {
                             type="url"
                             name="url"
                             value={user.url}
-                            onChange={handleChange}/>
+                            onChange={handleFilterChange}/>
 
                 <div className="photo-container">
                     {<img src={user.url} alt="profile pic preview"/>}
