@@ -12,9 +12,13 @@ const PORT = 9000
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.json("Hello to my app")
-})
+var corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+
+
+//AuthModal
 
 app.post('/signup', async (req, res) => {
     const client = new MongoClient(uri)
@@ -69,9 +73,7 @@ app.post('/login', async (req, res) => {
         await client.connect()
         const database = client.db('data')
         const users = database.collection('users')
-
         const user = await users.findOne({email})
-        
         if (user === null){
             res.status(408).send('Invalid credentials')
         }
@@ -90,6 +92,35 @@ app.post('/login', async (req, res) => {
     }
 })
 
+//Dashboard
+
+app.get('/age-filters', async (req, res) => {
+    
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const filters = database.collection('filters')
+        const users = database.collection('users')
+
+        const query = { user_id: { $eq : userId }}
+        const foundFilters = await filters.findOne(query)
+        const ageMax = Number(foundFilters.age_max)
+        const ageMin = Number(foundFilters.age_min)
+        query2 = { age: { $lte: ageMax, $gte: ageMin }}
+        
+        foundUsers = await users.find(query2)
+        
+        const foundUsersArray = await foundUsers.toArray()
+
+        res.send(foundUsersArray)
+    }
+    finally{
+        await client.close()
+    }
+})
+
 app.get('/user', async (req, res) => {
     const client = new MongoClient(uri)
     const userId = req.query.userId
@@ -102,69 +133,6 @@ app.get('/user', async (req, res) => {
         const query = { user_id: userId }
         const user = await users.findOne(query)
         res.send(user)
-    } finally {
-        await client.close()
-    }
-})
-
-app.get('/socials', async (req, res) => {
-    const client = new MongoClient(uri)
-    const userId = req.query.userId
-
-    try {
-        await client.connect()
-        const database = client.db('data')
-        const socials = database.collection('socials')
-
-        const query = { user_id: userId }
-        const user = await socials.findOne(query)
-        res.send(user)
-    } finally {
-        await client.close()
-    }
-})
-
-app.get('/filters', async (req, res) => {
-    const client = new MongoClient(uri)
-    const userId = req.query.userId
-
-    try {
-        await client.connect()
-        const database = client.db('data')
-        const filters = database.collection('filters')
-
-        const query = { user_id: userId }
-        const user = await filters.findOne(query)
-        res.send(user)
-    } finally {
-        await client.close()
-    }
-})
-
-
-
-app.get('/users', async (req, res) => {
-    const client = new MongoClient(uri)
-    const userIds = JSON.parse(req.query.userIds)
-    try {
-        await client.connect()
-        const database = client.db('data')
-        const users = database.collection('users')
-
-        const pipeline = 
-        [
-            {
-                '$match': {
-                    'user_id': {
-                        '$in': userIds
-
-                    }
-                }
-            }
-        ]
-
-        const foundUsers = await users.aggregate(pipeline).toArray()
-        res.send(foundUsers)
     } finally {
         await client.close()
     }
@@ -194,6 +162,54 @@ app.get('/gendered-users', async (req, res) => {
         await client.close()
     }
 })
+
+app.get('/filters', async (req, res) => {    //utilisé dans settings également
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const filters = database.collection('filters')
+
+        const query = { user_id: userId }
+        const user = await filters.findOne(query)
+        res.send(user)
+    } finally {
+        await client.close()
+    }
+})
+
+
+
+app.get('/users', async (req, res) => {    //utilisé dans MatchesDisplay également
+    const client = new MongoClient(uri)
+    const userIds = JSON.parse(req.query.userIds)
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+
+        const pipeline = 
+        [
+            {
+                '$match': {
+                    'user_id': {
+                        '$in': userIds
+
+                    }
+                }
+            }
+        ]
+
+        const foundUsers = await users.aggregate(pipeline).toArray()
+        res.send(foundUsers)
+    } finally {
+        await client.close()
+    }
+})
+
+//Onboarding
 
 app.put('/user', async (req, res) => {
     const client = new MongoClient(uri)
@@ -244,56 +260,32 @@ app.put('/user', async (req, res) => {
     }
 })
 
-app.put('/addmatch', async (req, res) => {
+//Settings
+
+app.put('/change-password', async (req, res) => {
     const client = new MongoClient(uri)
-    const { userId, matchedUserId } = req.body
+    const password = req.body.password
     try {
         await client.connect()
         const database = client.db('data')
         const users = database.collection('users')
-
+        const query = { user_id: password.user_id }
+        const user = await users.findOne(query)
+        const correctPassword = await bcrypt.compare(password.ancient_password, user.hashed_password)
         
-        const query = { user_id: userId }
-        const updateDocument = {
-            $push: { matches: { user_id: matchedUserId }}, 
+        if(correctPassword){
+            const hashedPassword = await bcrypt.hash(password.new_password, 10)
+            const updateDocument = { 
+                $set: {
+                    hashed_password: hashedPassword, 
+                }
+            }
+            const updatedUser = await users.updateOne(query, updateDocument)
+            res.send(updatedUser)
         }
-        const user = await users.updateOne(query, updateDocument)
-        res.send(user)
+        else { res.status(408).send('invalid password') }
     } finally {
-        await client.close() 
-    }
-})
-
-app.get('/messages', async (req, res) => {
-    const client = new MongoClient(uri)
-    const {userId, correspondingUserId} = req.query
-    try {
-        await client.connect()
-        const database = client.db('data')
-        const messages = database.collection('messages')
-
-        const query = {
-            from_userId: userId, to_userId: correspondingUserId
-        }
-        const foundMessages = await messages.find(query).toArray()
-        res.send(foundMessages)
-    } finally {
-        await client.close() 
-    }
-})
-
-app.post('/message', async (req, res) => {
-    const client = new MongoClient(uri)
-    const message = req.body.message
-
-    try {
-        await client.connect()
-        const database = client.db('data')
-        const messages = database.collection('messages')
-        const insertedMessage = await messages.insertOne(message)
-        res.send(insertedMessage)
-    } finally {
-        await client.close() 
+        await client.close()
     }
 })
 
@@ -368,6 +360,25 @@ app.delete('/userDel', async (req, res) => {
     }
 })
 
+app.get('/filters', async (req, res) => {
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const filters = database.collection('filters')
+
+        const query = { user_id: userId }
+        const user = await filters.findOne(query)
+        res.send(user)
+    } finally {
+        await client.close()
+    }
+})
+
+//Premium
+
 app.get('/premium-list', async (req, res) => {
     const client = new MongoClient(uri)
     const userId = req.query.userId
@@ -393,6 +404,86 @@ app.get('/premium-list', async (req, res) => {
         await client.close()
     }
 })
+
+
+app.put('/addmatch', async (req, res) => {
+    const client = new MongoClient(uri)
+    const { userId, matchedUserId } = req.body
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const users = database.collection('users')
+
+        
+        const query = { user_id: userId }
+        const updateDocument = {
+            $push: { matches: { user_id: matchedUserId }}, 
+        }
+        const user = await users.updateOne(query, updateDocument)
+        res.send(user)
+    } finally {
+        await client.close() 
+    }
+})
+
+//ChatDisplay
+
+app.get('/messages', async (req, res) => {
+    const client = new MongoClient(uri)
+    const {userId, correspondingUserId} = req.query
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const messages = database.collection('messages')
+
+        const query = {
+            from_userId: userId, to_userId: correspondingUserId
+        }
+        const foundMessages = await messages.find(query).toArray()
+        res.send(foundMessages)
+    } finally {
+        await client.close() 
+    }
+})
+
+app.get('/socials', async (req, res) => { 
+    const client = new MongoClient(uri)
+    const userId = req.query.userId
+    console.log(userId)
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const socials = database.collection('socials')
+
+        const query = { user_id: userId }
+        const user = await socials.findOne(query)
+        console.log(user)
+        res.send(user)
+    } finally {
+        await client.close()
+    }
+})
+
+//ChatInput
+
+app.post('/message', async (req, res) => {
+    const client = new MongoClient(uri)
+    const message = req.body.message
+
+    try {
+        await client.connect()
+        const database = client.db('data')
+        const messages = database.collection('messages')
+        const insertedMessage = await messages.insertOne(message)
+        res.send(insertedMessage)
+    } finally {
+        await client.close() 
+    }
+})
+
+
+//BecomePremium
 
 app.get('/verify-code', async (req, res) => {
     const client = new MongoClient(uri)
@@ -472,34 +563,6 @@ app.post('/new-code', async (req, res) => {
         await client.close()
     }
 })
-
-app.get('/age-filters', async (req, res) => {
-    
-    const client = new MongoClient(uri)
-    const userId = req.query.userId
-    try {
-        await client.connect()
-        const database = client.db('data')
-        const filters = database.collection('filters')
-        const users = database.collection('users')
-
-        const query = { user_id: { $eq : userId }}
-        const foundFilters = await filters.findOne(query)
-        const ageMax = Number(foundFilters.age_max)
-        const ageMin = Number(foundFilters.age_min)
-        query2 = { age: { $lte: ageMax, $gte: ageMin }}
-        
-        foundUsers = await users.find(query2)
-        
-        const foundUsersArray = await foundUsers.toArray()
-
-        res.send(foundUsersArray)
-    }
-    finally{
-        await client.close()
-    }
-})
-
 
 
 

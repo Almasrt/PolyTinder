@@ -63,6 +63,7 @@ const BecomePremium = () => {
                             <ul>
                                 <li>Swipe without limits</li>
                                 <li>Send messages to your matches</li>
+                                <li>Get the Instagram and Facebook @ of your matches</li>
                             </ul>
                         </h4>
                     </div>

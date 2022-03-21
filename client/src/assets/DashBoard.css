@@ -12,42 +12,12 @@
     height: 100vh;
 }
 
-.swipe {
-    position: absolute;
-}
-
-.dashboard__card-container {
-    width: 400px;
-    height: 650px;
-}
-
-.card {
-    background-color: #fff;
-    width: 400px;
-    height: 650px;
-    box-shadow: inset 0px -100px 100px 10px rgba(0,0,0,0.4), 
-    0px 0px 50px 10px rgba(0,0,0,0.15);
-    border-radius: 30px;
-    background-size: cover;
-    background-position: center;
-    
-}
 
 .swipe-info{
     position: relative;
     bottom: 0;
     margin: 20px;
     padding: 50px;
-}
-
-  
-.card h3 {
-    font-size: 25px;
-    font-weight: bold;
-    position: absolute;
-    bottom: 0px;
-    margin: 15px;
-    color: rgb(255, 255, 255);
 }
 
 .settings-button {

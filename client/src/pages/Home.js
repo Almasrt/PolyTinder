@@ -5,6 +5,7 @@ import useState from 'react-hook-use-state';
 import AuthModal from "../Components/AuthModal";
 import IconButton from '@mui/material/IconButton';
 import { useCookies } from 'react-cookie'
+import CookieConsent from "react-cookie-consent";
 
 const Home = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['user'])
@@ -35,6 +36,17 @@ const Home = () => {
                     <AuthModal setShowModal={setShowModal} isSignUp={isSignUp}/>
                 )}
             </div>
+            <CookieConsent
+                location="bottom"
+                expires={20}
+                style={{ background: "#2B373B" }}
+                buttonStyle={{ backgroundColor: "#fe3872", color: "#ffffff", fontSize: "13px", borderRadius: "20px" }}
+                overlay="true"
+                overlayStyle={{backgroundColor: "rgba(0,0,0,0.6)"}}
+                acceptOnOverlayClick="true">
+                This website uses cookies to enhance the user experience.{" "}
+                <span style={{ fontSize: "10px" }}>You can accept by clicking on "I understand" or anywhere on the screen.</span>
+            </CookieConsent>
         </div>
     );
   }

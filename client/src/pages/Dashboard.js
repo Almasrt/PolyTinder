@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Premium from '../Components/Premium';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import { scopedCssBaselineClasses } from '@mui/material';
 
 
 const Dashboard = () => {
@@ -37,6 +38,7 @@ const Dashboard = () => {
         params: {userId}
       })
       setUser(response.data)
+
     } catch (error) {
       console.log(error)
     }
@@ -148,7 +150,7 @@ const Dashboard = () => {
 
   const handleNewCodeChange = (e) => {
     setCode(e.target.value)
-}
+  }
     
     return (
       <>
@@ -164,11 +166,12 @@ const Dashboard = () => {
         {showPremiumModal && <div className="premium-modal">
           <Premium setShowPremiumModal={setShowPremiumModal} userId={userId}/>
           </div>}
-          
           <div> {totalyFilteredUsers?.map((genderedUser) =>
           <TinderCard className='swipe' preventSwipe={["up", "down"]} key={genderedUser.user_id} onSwipe={(dir) => swiped(dir, genderedUser.user_id)} onCardLeftScreen={() => setLastUser(genderedUser)}>
-            <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>
+            <div style={{ backgroundImage: 'url(' + genderedUser.url + ')' }} className='card'>              
               <h3>{genderedUser.first_name}</h3>
+              <h4>{genderedUser.age}</h4>
+              <h5>{genderedUser.about}</h5>
             </div>
           </TinderCard>
         )}
@@ -176,6 +179,8 @@ const Dashboard = () => {
         {goBack && <TinderCard className='swipe' preventSwipe={["up", "down"]} key={lastUser?.user_id} onSwipe={(dir) => swiped(dir, lastUser?.user_id)} onCardLeftScreen={() => setgoBack(false)}>
             <div style={{ backgroundImage: 'url(' + lastUser?.url + ')' }} className='card'>
               <h3>{lastUser?.first_name}</h3>
+              <h4>{lastUser?.age}</h4>
+              <h5>{lastUser?.about}</h5>
             </div>
           </TinderCard>}
           

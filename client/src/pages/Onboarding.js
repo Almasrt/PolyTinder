@@ -25,7 +25,6 @@ const Onboarding = () => {
         age_min: null,
         age_max: null,
         insta: '', 
-        snap: '', 
         facebook: '',
         matches: []
     })
@@ -208,6 +207,7 @@ const Onboarding = () => {
                             id="about"
                             type="text"
                             name="about"
+                            maxlength="35"
                             value={formData.about}
                             onChange={handleChange}
                             required={true}
@@ -222,16 +222,6 @@ const Onboarding = () => {
                             name="insta"
                             placeholder="@insta"
                             value={formData.insta}
-                            onChange={handleChange}/>
-                            </div>
-                        <div className="social">
-                        <img src="https://cdn-icons-png.flaticon.com/512/174/174870.png" alt="icone snapchat"/>
-                        <input 
-                            id="snap"
-                            type="text"
-                            name="snap"
-                            placeholder="@snap"
-                            value={formData.snap}
                             onChange={handleChange}/>
                             </div>
                         <div className="social">

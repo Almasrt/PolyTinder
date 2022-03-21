@@ -10,6 +10,7 @@ const Premium = ({setShowPremiumModal, userId}) => {
     const [likers, setLikers] = useState([]);
     const [lastDirection, setLastDirection] = useState()
     const [lastUser, setLastUser] = useState(null)
+    const [socials, setSocials] = useState([])
 
     const handleClick = () => {
         setShowPremiumModal(false)
@@ -38,7 +39,12 @@ const Premium = ({setShowPremiumModal, userId}) => {
 
     const getLikers = async () => {
         try {
-            
+          console.log(userId)
+          const response1 = await axios.get('http://localhost:9000/socials', {
+            params: {userId}
+          })
+          setSocials(response1.data)
+
           const response = await axios.get('http://localhost:9000/premium-list', {
             params: { userId: userId }
           })
@@ -48,7 +54,6 @@ const Premium = ({setShowPremiumModal, userId}) => {
           console.log(error)
         }
       }
-
     
       useEffect(() => {
         getLikers()
@@ -56,19 +61,20 @@ const Premium = ({setShowPremiumModal, userId}) => {
 
     return (
         <div className="premium-modal">
+          <CancelIcon className="close_icon" onClick={handleClick} fontSize="medium"/>
           <div className="all-modal">
-            <div className="matches-display">
-            
+            <div className="premium-matches-display">
               <h2>Your secret fans</h2>
                 {likers?.map((match) => (
             <TinderCard className='swipe' preventSwipe={["up", "down"]} key={match.user_id} onSwipe={(dir) => swiped(dir, match)} onCardLeftScreen={() => setLastUser(match)}>
-            <div style={{ backgroundImage: 'url(' + match.url + ')' }} className='card-premium'>
+            <div style={{ backgroundImage: 'url(' + match.url + ')' }} className='card'>
               <h3>{match.first_name}</h3>
+              <h4>{match.age}</h4>
+              <h5>{match.about}</h5>
             </div>
           </TinderCard>
         ))}
           </div>
-          <CancelIcon onClick={handleClick} fontSize="medium"/>
         </div>
         </div>       
     )

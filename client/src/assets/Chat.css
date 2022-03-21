@@ -49,6 +49,18 @@ textarea {
     align-items: center;
 }
 
+.card__icons {
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+}
+.card__icons img {
+    width: 25px;
+    border-radius: 17px;
+    margin-left: 10px;
+}
+
 .chat-message-header {
     display: flex;
 }

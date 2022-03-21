@@ -17,10 +17,14 @@ const Settings = () => {
     const [user, setUser] = useState(null)
     const [socials, setSocials] = useState(null)
     const [filters, setFilters] = useState(null)
+    const [password, setPassword] = useState({
+        user_id: cookies.UserId,
+        ancient_password: '',
+        new_password: ''
+    })
+    const [error, setError] = useState(null)
     const userId = cookies.UserId
     const authToken = cookies.AuthToken
-
-
 
     const getUser = async () => {
         try {
@@ -52,10 +56,14 @@ const Settings = () => {
         user.age = userAge
 
         try {
+            if(password.ancient_password !== '' && password.new_password !== ''){
+                const changePassword = await axios.put('http://localhost:9000/change-password', {password})
+            }
             const response = await axios.put('http://localhost:9000/userUp', {user, socials, filters})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {
+            setError("A problem occured")
             console.log(err)
         }
     }
@@ -99,7 +107,17 @@ const Settings = () => {
             ...prevState,
             [name] : value
         }))
+    }
 
+    const handlePasswordChange = (e) => {
+        setError('')
+        const value = e.target.value
+        const name = e.target.name
+        
+        setPassword((prevState) => ({
+            ...prevState,
+            [name] : value
+        }))
     }
 
     const ConfirmDelete = () => {
@@ -130,8 +148,7 @@ const Settings = () => {
         } catch (err) {
             console.log(err)
         }
-    }
-    
+    }    
 
     useEffect(() => {
         getUser()
@@ -275,6 +292,7 @@ const Settings = () => {
                             id="about"
                             type="text"
                             name="about"
+                            maxlength="35"
                             value={user.about}
                             onChange={handleChange}
                             required={true}
@@ -287,18 +305,8 @@ const Settings = () => {
                             id="insta"
                             type="text"
                             name="insta"
-                            placeholder="@insta"
+                            placeholder="ex: polycao_mtp"
                             value={socials.insta}
-                            onChange={handleSocialChange}/>
-                            </div>
-                        <div className="social">
-                        <img src="https://cdn-icons-png.flaticon.com/512/174/174870.png" alt="icone snapchat"/>
-                        <input 
-                            id="snap"
-                            type="text"
-                            name="snap"
-                            placeholder="@snap"
-                            value={socials.snap}
                             onChange={handleSocialChange}/>
                             </div>
                         <div className="social">
@@ -307,7 +315,7 @@ const Settings = () => {
                             id="facebook"
                             type="text"
                             name="facebook"
-                            placeholder="@facebook"
+                            placeholder="ex: flibustechBDE2020"
                             value={socials.facebook}
                             onChange={handleSocialChange}/>
                             </div>
@@ -315,6 +323,21 @@ const Settings = () => {
                     <input type="submit"/>
               </section>
               <section>
+                <label htmlFor="password">Password</label>
+                <input 
+                            id="ancient-password"
+                            type="password"
+                            placeholder="ancient password"
+                            name="ancient_password"
+                            value={password.ancient_password}
+                            onChange={handlePasswordChange}/>
+                <input 
+                            id="new-password"
+                            type="password"
+                            placeholder="new password"
+                            name="new_password"
+                            value={password.new_password}
+                            onChange={handlePasswordChange}/>
                 <label htmlFor="about">Profile photo</label>
                 <input 
                             id="url"
@@ -322,6 +345,7 @@ const Settings = () => {
                             name="url"
                             value={user.url}
                             onChange={handleFilterChange}/>
+                <h4>{error}</h4>
 
                 <div className="photo-container">
                     {<img src={user.url} alt="profile pic preview"/>}
