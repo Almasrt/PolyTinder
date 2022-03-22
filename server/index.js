@@ -449,7 +449,6 @@ app.get('/messages', async (req, res) => {
 app.get('/socials', async (req, res) => { 
     const client = new MongoClient(uri)
     const userId = req.query.userId
-    console.log(userId)
 
     try {
         await client.connect()
@@ -458,7 +457,6 @@ app.get('/socials', async (req, res) => {
 
         const query = { user_id: userId }
         const user = await socials.findOne(query)
-        console.log(user)
         res.send(user)
     } finally {
         await client.close()

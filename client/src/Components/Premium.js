@@ -39,7 +39,6 @@ const Premium = ({setShowPremiumModal, userId}) => {
 
     const getLikers = async () => {
         try {
-          console.log(userId)
           const response1 = await axios.get('http://localhost:9000/socials', {
             params: {userId}
           })
