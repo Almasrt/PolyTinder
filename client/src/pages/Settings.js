@@ -292,7 +292,7 @@ const Settings = () => {
                             id="about"
                             type="text"
                             name="about"
-                            maxlength="35"
+                            maxLength="35"
                             value={user.about}
                             onChange={handleChange}
                             required={true}
@@ -305,7 +305,7 @@ const Settings = () => {
                             id="insta"
                             type="text"
                             name="insta"
-                            placeholder="ex: polycao_mtp"
+                            placeholder="ex: polycao.mtp"
                             value={socials.insta}
                             onChange={handleSocialChange}/>
                             </div>
@@ -344,7 +344,7 @@ const Settings = () => {
                             type="url"
                             name="url"
                             value={user.url}
-                            onChange={handleFilterChange}/>
+                            onChange={handleChange}/>
                 <h4>{error}</h4>
 
                 <div className="photo-container">

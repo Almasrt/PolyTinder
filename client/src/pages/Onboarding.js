@@ -207,7 +207,7 @@ const Onboarding = () => {
                             id="about"
                             type="text"
                             name="about"
-                            maxlength="35"
+                            maxLength="35"
                             value={formData.about}
                             onChange={handleChange}
                             required={true}
@@ -220,7 +220,7 @@ const Onboarding = () => {
                             id="insta"
                             type="text"
                             name="insta"
-                            placeholder="@insta"
+                            placeholder="ex: polycao.mtp"
                             value={formData.insta}
                             onChange={handleChange}/>
                             </div>
@@ -230,7 +230,7 @@ const Onboarding = () => {
                             id="facebook"
                             type="text"
                             name="facebook"
-                            placeholder="@facebook"
+                            placeholder="ex: flibustechBDE2020"
                             value={formData.facebook}
                             onChange={handleChange}/>
                             </div>
