@@ -22,10 +22,9 @@ const Onboarding = () => {
         url: '',
         about: '',
         age: '',
-        age_min: '',
-        age_max: '',
+        age_min: null,
+        age_max: null,
         insta: '', 
-        snap: '', 
         facebook: '',
         matches: []
     })
@@ -93,6 +92,8 @@ const Onboarding = () => {
                         type="number"
                         name="dob_day"
                         placeholder="DD"
+                        min="01"
+                        max="31"
                         required={true}
                         value={formData.dob_day}
                         onChange={handleChange}/>
@@ -101,6 +102,8 @@ const Onboarding = () => {
                         type="number"
                         name="dob_month"
                         placeholder="MM"
+                        min="01"
+                        max="12"
                         required={true}
                         value={formData.dob_month}
                         onChange={handleChange}/>
@@ -109,6 +112,8 @@ const Onboarding = () => {
                         type="number"
                         name="dob_year"
                         placeholder="YYYY"
+                        min="1960"
+                        max="2006"
                         required={true}
                         value={formData.dob_year}
                         onChange={handleChange}/>
@@ -183,6 +188,8 @@ const Onboarding = () => {
                             type="number"
                             name="age_min"
                             placeholder="age min"
+                            min="16"
+                            max="100"
                             value={formData.age_min}
                             onChange={handleChange}/>
                         <input 
@@ -190,6 +197,8 @@ const Onboarding = () => {
                             type="number"
                             name="age_max"
                             placeholder="age max"
+                            min="16"
+                            max="100"
                             value={formData.age_max}
                             onChange={handleChange}/>
                             </div>
@@ -198,6 +207,7 @@ const Onboarding = () => {
                             id="about"
                             type="text"
                             name="about"
+                            maxLength="35"
                             value={formData.about}
                             onChange={handleChange}
                             required={true}
@@ -210,18 +220,8 @@ const Onboarding = () => {
                             id="insta"
                             type="text"
                             name="insta"
-                            placeholder="@insta"
+                            placeholder="ex: polycao.mtp"
                             value={formData.insta}
-                            onChange={handleChange}/>
-                            </div>
-                        <div className="social">
-                        <img src="https://cdn-icons-png.flaticon.com/512/174/174870.png" alt="icone snapchat"/>
-                        <input 
-                            id="snap"
-                            type="text"
-                            name="snap"
-                            placeholder="@snap"
-                            value={formData.snap}
                             onChange={handleChange}/>
                             </div>
                         <div className="social">
@@ -230,7 +230,7 @@ const Onboarding = () => {
                             id="facebook"
                             type="text"
                             name="facebook"
-                            placeholder="@facebook"
+                            placeholder="ex: flibustechBDE2020"
                             value={formData.facebook}
                             onChange={handleChange}/>
                             </div>

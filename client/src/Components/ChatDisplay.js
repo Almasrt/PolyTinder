@@ -11,6 +11,7 @@ const ChatDisplay = ({user, clickedUser}) => {
     const userId = user?.user_id
     const clickedUserId = clickedUser.user_id
     const [clickedUsersMessages, setClickedUsersMessages] = useState(null)
+    const [socials, setSocials] = useState([])
 
     const getUsersMessages = async () => {
         try {
@@ -34,9 +35,21 @@ const ChatDisplay = ({user, clickedUser}) => {
         }
     }
 
+    const getSocials = async  () => {
+        try {
+            const response1 = await axios.get('http://localhost:9000/socials', {
+              params: {userId: clickedUserId}
+            })
+            setSocials(response1.data)
+        } catch (error) {
+            console.log(error)
+            }
+    }
+
     useEffect(() => {
         getUsersMessages()
         getClickedUsersMessages()
+        getSocials()
     }, [])
 
     const messages = []
@@ -63,6 +76,10 @@ const ChatDisplay = ({user, clickedUser}) => {
 
     return (
         <div>
+            <div className="card__icons">
+              <a href={'https://www.instagram.com/' + socials.insta +'/?hl=fr'}><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="icone instagram"/></a>
+              <a href={'https://www.facebook.com/' + socials.facebook}><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="icone facebook"/></a> 
+              </div>
             <Chat descendingOrderMessages={descendingOrderMessages}/>
             <ChatInput user={user} clickedUser={clickedUser} getUsersMessages={getUsersMessages} getClickedUsersMessages={getClickedUsersMessages}/>
         </div>

@@ -1,31 +1,31 @@
 .premium-modal {
     z-index:1;
-    position: fixed;
+    position: absolute;
     padding: 20px;
-    top: 10%;
-	bottom: 5%;
-	right: 10%;
-	left: 30%;
+    top: 37px;
+    bottom: 70px;
+	left: 36.5%;
+    right: 13%;
     transition: transform .2s;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255);
     border-radius: 10px;
     text-align: center;
-    color:black
+    color:black;
 }
 
 .all-modal {
-    padding: 30px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    padding-right: 60px;
+}
+
+.close_icon {
+    float: right
 }
 
 .all-modal h2 {
-    margin-left: 70px;
-}
-
-.matches-display {
-    width: 450px;
+    width: fit-content;
+    margin: 18px 70px;
 }
 
 .premium-modal h2 {
@@ -46,8 +46,33 @@
     background-color: #fff;
     width: 400px;
     height: 650px;
-    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.20);
+    box-shadow: inset 0px -100px 100px 10px rgba(0,0,0,0.4), 
+    0px 0px 50px 10px rgba(0,0,0,0.15), inset 0px 100px 100px 10px rgba(0,0,0,0.4);
     border-radius: 30px;
     background-size: cover;
     background-position: center;
+}
+.card h3 {
+    position: absolute;
+    bottom: 30px;
+    font-size: 23px;
+    margin: 16px;
+    color: #fff;
+}
+
+.card h4 {
+    position: absolute;
+    bottom: 30px;
+    font-size: 23px;
+    margin: 15px;
+    margin-left: 355px;
+    color: #fff;
+}
+
+.card h5 {
+    position: absolute;
+    bottom: 5px;
+    font-size: 18px;
+    margin: 15px;
+    color: #fff;
 }

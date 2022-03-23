@@ -15,9 +15,16 @@ const Settings = () => {
     let navigate = useNavigate()
     const [cookies, setCookie, removeCookie] = useCookies(['user'])
     const [user, setUser] = useState(null)
+    const [socials, setSocials] = useState(null)
+    const [filters, setFilters] = useState(null)
+    const [password, setPassword] = useState({
+        user_id: cookies.UserId,
+        ancient_password: '',
+        new_password: ''
+    })
+    const [error, setError] = useState(null)
     const userId = cookies.UserId
-
-
+    const authToken = cookies.AuthToken
 
     const getUser = async () => {
         try {
@@ -25,6 +32,16 @@ const Settings = () => {
             params: {userId}
           })
           setUser(response.data)
+
+          const response1 = await axios.get('http://localhost:9000/socials', {
+                params: {userId}
+                })
+            setSocials(response1.data)
+
+            const response2 = await axios.get('http://localhost:9000/filters', {
+                params: {userId}
+                })
+            setFilters(response2.data)
           
         } catch (error) {
           console.log(error)
@@ -39,10 +56,14 @@ const Settings = () => {
         user.age = userAge
 
         try {
-            const response = await axios.put('http://localhost:9000/userUp', {user})
+            if(password.ancient_password !== '' && password.new_password !== ''){
+                const changePassword = await axios.put('http://localhost:9000/change-password', {password})
+            }
+            const response = await axios.put('http://localhost:9000/userUp', {user, socials, filters})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {
+            setError("A problem occured")
             console.log(err)
         }
     }
@@ -61,13 +82,42 @@ const Settings = () => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         const name = e.target.name;
 
-        console.log(e.target.name)
-
         setUser((prevState) => ({
             ...prevState,
             [name] : value
         }))
 
+    }
+
+    const handleSocialChange = (e) => {
+        const value = e.target.value
+        const name = e.target.name
+        
+        setSocials((prevState) => ({
+            ...prevState,
+            [name] : value
+        }))
+    }
+
+    const handleFilterChange = (e) => {
+        const value = e.target.value
+        const name = e.target.name
+        
+        setFilters((prevState) => ({
+            ...prevState,
+            [name] : value
+        }))
+    }
+
+    const handlePasswordChange = (e) => {
+        setError('')
+        const value = e.target.value
+        const name = e.target.name
+        
+        setPassword((prevState) => ({
+            ...prevState,
+            [name] : value
+        }))
     }
 
     const ConfirmDelete = () => {
@@ -98,21 +148,19 @@ const Settings = () => {
         } catch (err) {
             console.log(err)
         }
-    }
-    
+    }    
 
     useEffect(() => {
         getUser()
     }, [])
     
-    
     return (
     <div>
-        <Nav setShowModal={() => {}} showModal={false}/>
+        <Nav authToken={authToken} setShowModal={() => {}} showModal={false}/>
       <div className="onboarding">
           <h2>EDIT ACCOUNT</h2>
           <>
-          {user &&
+          {user && filters && socials &&
           <form onSubmit={handleSubmit}>
               <section>
                 <label htmlFor="first_name">First Name</label>
@@ -130,6 +178,8 @@ const Settings = () => {
                         id="dob_day"
                         type="number"
                         name="dob_day"
+                        min="01"
+                        max="31"
                         placeholder={user.dob_day}
                         value={user.dob_day}
                         onChange={handleChange}/>
@@ -137,6 +187,8 @@ const Settings = () => {
                         id="dob_month"
                         type="number"
                         name="dob_month"
+                        min="01"
+                        max="12"
                         placeholder={user.dob_month}
                         value={user.dob_month}
                         onChange={handleChange}/>
@@ -144,6 +196,8 @@ const Settings = () => {
                         id="dob_year"
                         type="number"
                         name="dob_year"
+                        min="1960"
+                        max="2006"
                         placeholder={user.dob_year}
                         value={user.dob_year}
                         onChange={handleChange}/>
@@ -212,6 +266,37 @@ const Settings = () => {
                             checked={user.gender_interest === 'everyone'}/>
                         <label htmlFor="everyone-gender-interest">Everyone</label>
                         </div>
+                        <label>Age Filters *</label>
+                        <div className="multiple-input-container">
+                        <input 
+                            id="age_min"
+                            type="number"
+                            name="age_min"
+                            placeholder="age min"
+                            min="16"
+                            max="100"
+                            value={filters.age_min}
+                            onChange={handleFilterChange}/>
+                        <input 
+                            id="age_max"
+                            type="number"
+                            name="age_max"
+                            placeholder="age max"
+                            min="16"
+                            max="100"
+                            value={filters.age_max}
+                            onChange={handleFilterChange}/>
+                            </div>
+                        <label htmlFor="about">About me *</label>
+                        <input 
+                            id="about"
+                            type="text"
+                            name="about"
+                            maxLength="35"
+                            value={user.about}
+                            onChange={handleChange}
+                            required={true}
+                            placeholder="I like playing candy crush..."/>
                         <label>Social Networks</label>
                     <div className="socials-input-container">
                         <div className="social">
@@ -220,34 +305,39 @@ const Settings = () => {
                             id="insta"
                             type="text"
                             name="insta"
-                            placeholder="@insta"
-                            value={user.insta}
-                            onChange={handleChange}/>
+                            placeholder="ex: polycao.mtp"
+                            value={socials.insta}
+                            onChange={handleSocialChange}/>
                             </div>
                         <div className="social">
-                        <img src="https://cdn-icons-png.flaticon.com/512/174/174870.png" alt="icone snapchat"/>
-                        <input 
-                            id="snap"
-                            type="text"
-                            name="snap"
-                            placeholder="@snap"
-                            value={user.snap}
-                            onChange={handleChange}/>
-                            </div>
-                        <div className="social">
-                        <img src="https://cdn-icons.flaticon.com/png/512/665/premium/665209.png?token=exp=1647292707~hmac=80b9af4fab0b8c6c43a88fbd5142dfbd" alt="icone facebook"/>
+                        <img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/facebook_icon_137647.png" alt="icone facebook"/>
                         <input 
                             id="facebook"
                             type="text"
                             name="facebook"
-                            placeholder="@facebook"
-                            value={user.facebook}
-                            onChange={handleChange}/>
+                            placeholder="ex: flibustechBDE2020"
+                            value={socials.facebook}
+                            onChange={handleSocialChange}/>
                             </div>
                         </div>
                     <input type="submit"/>
               </section>
               <section>
+                <label htmlFor="password">Password</label>
+                <input 
+                            id="ancient-password"
+                            type="password"
+                            placeholder="ancient password"
+                            name="ancient_password"
+                            value={password.ancient_password}
+                            onChange={handlePasswordChange}/>
+                <input 
+                            id="new-password"
+                            type="password"
+                            placeholder="new password"
+                            name="new_password"
+                            value={password.new_password}
+                            onChange={handlePasswordChange}/>
                 <label htmlFor="about">Profile photo</label>
                 <input 
                             id="url"
@@ -255,6 +345,7 @@ const Settings = () => {
                             name="url"
                             value={user.url}
                             onChange={handleChange}/>
+                <h4>{error}</h4>
 
                 <div className="photo-container">
                     {<img src={user.url} alt="profile pic preview"/>}
