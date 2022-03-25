@@ -1,1 +1,1 @@
-web: serve client/dist
+web: serve client/dist --port 5000
