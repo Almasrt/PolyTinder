@@ -13,7 +13,7 @@ const MatchesDisplay = ({ matches, setclickedUser }) => {
 
     const getMatches = async () => {
         try {
-            const response = await axios.get('https://polytinder.herokuapp.com/users', {
+            const response = await axios.get(`${API_URL}/users`, {
                 params: {userIds: JSON.stringify(matchedUserIds)}
             })
             setMatchedProfiles(response.data)

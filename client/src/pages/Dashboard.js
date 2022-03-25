@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const getUser = async () => {
     try {
-      const response = await axios.get('https://polytinder.herokuapp.com/user', {
+      const response = await axios.get(`${API_URL}/user`, {
         params: {userId}
       })
       setUser(response.data)
@@ -47,7 +47,7 @@ const Dashboard = () => {
 
   const getAgeFilteredUsers = async () => {
     try {
-      const response = await axios.get('https://polytinder.herokuapp.com/age-filters', {
+      const response = await axios.get(`${API_URL}/age-filters`, {
         params: {userId: userId}
       })
 
@@ -60,7 +60,7 @@ const Dashboard = () => {
 
   const getGenderedUsers = async () => {
     try {
-      const response = await axios.get('https://polytinder.herokuapp.com/gendered-users', {
+      const response = await axios.get(`${API_URL}/gendered-users`, {
         params: { gender: user?.gender_interest, userId: userId }
       })
       setGenderedUsers(response.data)
@@ -83,7 +83,7 @@ const Dashboard = () => {
 
   const updateMatches = async (matchedUserId) => {
     try {
-      axios.put('https://polytinder.herokuapp.com/addmatch', {
+      axios.put(`${API_URL}/addmatch`, {
         userId, 
         matchedUserId
       });
@@ -139,7 +139,7 @@ const Dashboard = () => {
       e.preventDefault()
       try {
           setError("")
-          const response = await axios.post('https://polytinder.herokuapp.com/new-code', {code})
+          const response = await axios.post('${API_URL}/new-code', {code})
           const success = response.status === 200
           if(success) setCode('')
       } catch (err) {

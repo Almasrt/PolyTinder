@@ -15,7 +15,7 @@ const ChatDisplay = ({user, clickedUser}) => {
 
     const getUsersMessages = async () => {
         try {
-            const response = await axios.get('https://polytinder.herokuapp.com/messages', {
+            const response = await axios.get(`${API_URL}/messages`, {
             params: {userId: userId, correspondingUserId: clickedUserId}
         })
         setUsersMessages(response.data)
@@ -26,7 +26,7 @@ const ChatDisplay = ({user, clickedUser}) => {
 
     const getClickedUsersMessages = async () => {
         try {
-            const response = await axios.get('https://polytinder.herokuapp.com/messages', {
+            const response = await axios.get(`${API_URL}/messages`, {
             params: {userId: clickedUserId, correspondingUserId: userId}
         })
         setClickedUsersMessages(response.data)
@@ -37,7 +37,7 @@ const ChatDisplay = ({user, clickedUser}) => {
 
     const getSocials = async  () => {
         try {
-            const response1 = await axios.get('https://polytinder.herokuapp.com/socials', {
+            const response1 = await axios.get(`${API_URL}/socials`, {
               params: {userId: clickedUserId}
             })
             setSocials(response1.data)

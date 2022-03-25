@@ -15,7 +15,7 @@ const ChatInput = ({user, clickedUser, getUsersMessages, getClickedUsersMessages
             message: textArea
         }
         try {
-            await axios.post('https://polytinder.herokuapp.com/message', { message })
+            await axios.post(`${API_URL}/message`, { message })
             getUsersMessages()
             getClickedUsersMessages()
             setTextArea("")

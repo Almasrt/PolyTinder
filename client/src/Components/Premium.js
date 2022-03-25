@@ -27,7 +27,7 @@ const Premium = ({setShowPremiumModal, userId}) => {
     const updateMatches = async (matchedUser) => {
       try {
         const matchedUserId = matchedUser.user_id
-        axios.put('https://polytinder.herokuapp.com/addmatch', {
+        axios.put(`${API_URL}/addmatch`, {
           userId, 
           matchedUserId
         });
@@ -39,12 +39,12 @@ const Premium = ({setShowPremiumModal, userId}) => {
 
     const getLikers = async () => {
         try {
-          const response1 = await axios.get('https://polytinder.herokuapp.com/socials', {
+          const response1 = await axios.get(`${API_URL}/socials`, {
             params: {userId}
           })
           setSocials(response1.data)
 
-          const response = await axios.get('https://polytinder.herokuapp.com/premium-list', {
+          const response = await axios.get(`${API_URL}/premium-list`, {
             params: { userId: userId }
           })
           setLikers(response.data);
