@@ -5,6 +5,7 @@ import useState from 'react-hook-use-state';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+import { API_URL } from "../api";
 
 const AuthModal = ( {setShowModal, isSignUp}) => {
     const [email, setEmail] = useState(null);

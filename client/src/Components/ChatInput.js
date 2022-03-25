@@ -1,6 +1,7 @@
 import axios from 'axios';
 import useState from 'react-hook-use-state';
 import "../assets/Chat.css"
+import { API_URL } from "../api";
 
 const ChatInput = ({user, clickedUser, getUsersMessages, getClickedUsersMessages}) => {
     const [textArea, setTextArea] = useState("");

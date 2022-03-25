@@ -3,6 +3,7 @@ import "../assets/Premium.css"
 import "../assets/index.css"
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { API_URL } from "../api";
 import TinderCard from 'react-tinder-card';
 
 const Premium = ({setShowPremiumModal, userId}) => {

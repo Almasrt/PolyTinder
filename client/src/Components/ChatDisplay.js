@@ -5,6 +5,7 @@ import "../assets/index.css"
 import axios from "axios"
 import useState from "react-hook-use-state"
 import { useEffect } from "react"
+import { API_URL } from "../api";
 
 const ChatDisplay = ({user, clickedUser}) => {
     const [usersMessages, setUsersMessages] = useState(null)

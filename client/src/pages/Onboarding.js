@@ -5,6 +5,7 @@ import "../assets/index.css"
 import { useCookies } from 'react-cookie'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from "../api";
 
 const Onboarding = () => {
     let navigate = useNavigate()

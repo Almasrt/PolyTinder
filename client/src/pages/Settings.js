@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
+import { API_URL } from "../api";
 
 
 const Settings = () => {
