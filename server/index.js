@@ -6,7 +6,7 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const app = express()
-const uri = process.env.URI
+const uri = process.env.MONGODB_URI
 const PORT = 9000
 
 app.use(cors())
