@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const app = express()
 const uri = process.env.MONGODB_URI
-const PORT = 9000
+const PORT = process.env.PORT
 
 app.use(cors())
 app.use(express.json())
