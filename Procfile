@@ -1,1 +1,1 @@
-web: serve client/dist --port 5000
+web: serve -s client/build
