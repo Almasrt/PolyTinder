@@ -48,7 +48,7 @@ const Onboarding = () => {
         formData.age = userAge
 
         try {
-            const response = await axios.put('http://localhost:9000/user', {formData})
+            const response = await axios.put('https://polytinder.herokuapp.com/user', {formData})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {

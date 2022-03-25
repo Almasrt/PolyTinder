@@ -28,17 +28,17 @@ const Settings = () => {
 
     const getUser = async () => {
         try {
-          const response = await axios.get('http://localhost:9000/user', {
+          const response = await axios.get('https://polytinder.herokuapp.com/user', {
             params: {userId}
           })
           setUser(response.data)
 
-          const response1 = await axios.get('http://localhost:9000/socials', {
+          const response1 = await axios.get('https://polytinder.herokuapp.com/socials', {
                 params: {userId}
                 })
             setSocials(response1.data)
 
-            const response2 = await axios.get('http://localhost:9000/filters', {
+            const response2 = await axios.get('https://polytinder.herokuapp.com/filters', {
                 params: {userId}
                 })
             setFilters(response2.data)
@@ -57,9 +57,9 @@ const Settings = () => {
 
         try {
             if(password.ancient_password !== '' && password.new_password !== ''){
-                const changePassword = await axios.put('http://localhost:9000/change-password', {password})
+                const changePassword = await axios.put('https://polytinder.herokuapp.com/change-password', {password})
             }
-            const response = await axios.put('http://localhost:9000/userUp', {user, socials, filters})
+            const response = await axios.put('https://polytinder.herokuapp.com/userUp', {user, socials, filters})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {
@@ -138,7 +138,7 @@ const Settings = () => {
     }
     const deleteAccount = async () => {
         try {
-            const response = await axios.delete('http://localhost:9000/userDel', {
+            const response = await axios.delete('https://polytinder.herokuapp.com/userDel', {
                 params : {user_id : user.user_id}
             }) 
             removeCookie('UserId', cookies.UserId)
