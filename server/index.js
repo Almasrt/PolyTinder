@@ -13,11 +13,6 @@ app.use(cors())
 app.use(express.json())
 
 
-var corsOptions = {
-    origin: 'https://back-thepolytinder.herokuapp.com/',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
-
 
 //AuthModal
 
