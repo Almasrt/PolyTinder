@@ -140,7 +140,7 @@ const Dashboard = () => {
       e.preventDefault()
       try {
           setError("")
-          const response = await axios.post(`${API_URL}/code/new-code`, {code})
+          const response = await axios.post(`${API_URL}/code/add`, {code})
           const success = response.status === 200
           if(success) setCode('')
       } catch (err) {
