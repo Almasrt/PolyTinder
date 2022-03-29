@@ -16,7 +16,7 @@ const BecomePremium = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.get(`${API_URL}/verify-code`, {params: {code}})
+            const response = await axios.get(`${API_URL}/code/verify`, {params: {code}})
             const success = response.status === 200
             if (success) {
                 const foundCode = response.data
@@ -31,7 +31,7 @@ const BecomePremium = () => {
 
     const changeStatus = async (newUserStatus) => {
         try {
-            const response = await axios.put(`${API_URL}/change-status`, {newUserStatus, userId})
+            const response = await axios.put(`${API_URL}/user/status`, {newUserStatus, userId})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {

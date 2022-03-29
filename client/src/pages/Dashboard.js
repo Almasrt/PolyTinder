@@ -48,7 +48,7 @@ const Dashboard = () => {
 
   const getAgeFilteredUsers = async () => {
     try {
-      const response = await axios.get(`${API_URL}/age-filters`, {
+      const response = await axios.get(`${API_URL}/user/age-filters`, {
         params: {userId: userId}
       })
 
@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   const getGenderedUsers = async () => {
     try {
-      const response = await axios.get(`${API_URL}/gendered-users`, {
+      const response = await axios.get(`${API_URL}/user/gendered-users`, {
         params: { gender: user?.gender_interest, userId: userId }
       })
       setGenderedUsers(response.data)
@@ -84,7 +84,7 @@ const Dashboard = () => {
 
   const updateMatches = async (matchedUserId) => {
     try {
-      axios.put(`${API_URL}/addmatch`, {
+      axios.put(`${API_URL}/user/addmatch`, {
         userId, 
         matchedUserId
       });
@@ -140,7 +140,7 @@ const Dashboard = () => {
       e.preventDefault()
       try {
           setError("")
-          const response = await axios.post(`${API_URL}/new-code`, {code})
+          const response = await axios.post(`${API_URL}/code/new-code`, {code})
           const success = response.status === 200
           if(success) setCode('')
       } catch (err) {

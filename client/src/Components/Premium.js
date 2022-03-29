@@ -28,7 +28,7 @@ const Premium = ({setShowPremiumModal, userId}) => {
     const updateMatches = async (matchedUser) => {
       try {
         const matchedUserId = matchedUser.user_id
-        axios.put(`${API_URL}/addmatch`, {
+        axios.put(`${API_URL}/user/addmatch`, {
           userId, 
           matchedUserId
         });
@@ -40,12 +40,12 @@ const Premium = ({setShowPremiumModal, userId}) => {
 
     const getLikers = async () => {
         try {
-          const response1 = await axios.get(`${API_URL}/socials`, {
+          const response1 = await axios.get(`${API_URL}/user/socials`, {
             params: {userId}
           })
           setSocials(response1.data)
 
-          const response = await axios.get(`${API_URL}/premium-list`, {
+          const response = await axios.get(`${API_URL}/user/premium-list`, {
             params: { userId: userId }
           })
           setLikers(response.data);
