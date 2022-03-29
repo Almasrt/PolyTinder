@@ -1,6 +1,7 @@
 import axios from 'axios';
 import useState from 'react-hook-use-state';
 import "../assets/Chat.css"
+import { API_URL } from "../api";
 
 const ChatInput = ({user, clickedUser, getUsersMessages, getClickedUsersMessages}) => {
     const [textArea, setTextArea] = useState("");
@@ -15,7 +16,7 @@ const ChatInput = ({user, clickedUser, getUsersMessages, getClickedUsersMessages
             message: textArea
         }
         try {
-            await axios.post('https://polytinder.herokuapp.com/message', { message })
+            await axios.post(`${API_URL}/message`, { message })
             getUsersMessages()
             getClickedUsersMessages()
             setTextArea("")

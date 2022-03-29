@@ -5,6 +5,7 @@ import "../assets/index.css"
 import { useCookies } from 'react-cookie'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from "../api";
 
 const Onboarding = () => {
     let navigate = useNavigate()
@@ -48,7 +49,7 @@ const Onboarding = () => {
         formData.age = userAge
 
         try {
-            const response = await axios.put('https://polytinder.herokuapp.com/user', {formData})
+            const response = await axios.put(`${API_URL}/user`, {formData})
             const success = response.status === 200
             if (success) navigate('/dashboard')
         } catch (err) {

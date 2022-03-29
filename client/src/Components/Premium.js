@@ -3,6 +3,7 @@ import "../assets/Premium.css"
 import "../assets/index.css"
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { API_URL } from "../api";
 import TinderCard from 'react-tinder-card';
 
 const Premium = ({setShowPremiumModal, userId}) => {
@@ -27,7 +28,7 @@ const Premium = ({setShowPremiumModal, userId}) => {
     const updateMatches = async (matchedUser) => {
       try {
         const matchedUserId = matchedUser.user_id
-        axios.put('https://polytinder.herokuapp.com/addmatch', {
+        axios.put(`${API_URL}/user/addmatch`, {
           userId, 
           matchedUserId
         });
@@ -39,12 +40,12 @@ const Premium = ({setShowPremiumModal, userId}) => {
 
     const getLikers = async () => {
         try {
-          const response1 = await axios.get('https://polytinder.herokuapp.com/socials', {
+          const response1 = await axios.get(`${API_URL}/user/socials`, {
             params: {userId}
           })
           setSocials(response1.data)
 
-          const response = await axios.get('https://polytinder.herokuapp.com/premium-list', {
+          const response = await axios.get(`${API_URL}/user/premium-list`, {
             params: { userId: userId }
           })
           setLikers(response.data);

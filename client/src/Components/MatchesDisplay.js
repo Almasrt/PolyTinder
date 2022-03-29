@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import useState from 'react-hook-use-state';
 import { useCookies } from 'react-cookie'
+import { API_URL } from "../api";
 
 
 const MatchesDisplay = ({ matches, setclickedUser }) => {
@@ -13,7 +14,7 @@ const MatchesDisplay = ({ matches, setclickedUser }) => {
 
     const getMatches = async () => {
         try {
-            const response = await axios.get('https://polytinder.herokuapp.com/users', {
+            const response = await axios.get(`${API_URL}/users`, {
                 params: {userIds: JSON.stringify(matchedUserIds)}
             })
             setMatchedProfiles(response.data)
