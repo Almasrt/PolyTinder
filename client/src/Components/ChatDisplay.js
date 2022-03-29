@@ -38,7 +38,7 @@ const ChatDisplay = ({user, clickedUser}) => {
 
     const getSocials = async  () => {
         try {
-            const response1 = await axios.get(`${API_URL}/socials`, {
+            const response1 = await axios.get(`${API_URL}/user/socials`, {
               params: {userId: clickedUserId}
             })
             setSocials(response1.data)
