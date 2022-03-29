@@ -9,12 +9,12 @@ const app = express()
 const uri = process.env.MONGODB_URI
 const PORT = process.env.PORT
 
-app.use(cors({origin:'https://thepolytinder.herokuapp.com'}))
+app.use(cors({origin:'https://thepolytinder.herokuapp.com/'}))
 app.use(express.json())
 
 
 var corsOptions = {
-    origin: 'https://thepolytinder.herokuapp.com',
+    origin: 'https://thepolytinder.herokuapp.com/',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 
