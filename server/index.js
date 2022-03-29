@@ -21,7 +21,7 @@ var corsOptions = {
 
 //AuthModal
 
-app.post('/signup', async (req, res) => {
+app.post('/user/signup', async (req, res) => {
     const client = new MongoClient(uri)
     const {email, password} = req.body
     const generatedUserId = uuidv4()
@@ -66,7 +66,7 @@ app.post('/signup', async (req, res) => {
     }
 })
 
-app.post('/login', async (req, res) => {
+app.post('/user/login', async (req, res) => {
     const client = new MongoClient(uri)
     const {email, password} = req.body
     
@@ -95,7 +95,7 @@ app.post('/login', async (req, res) => {
 
 //Dashboard
 
-app.get('/age-filters', async (req, res) => {
+app.get('/user/age-filters', async (req, res) => {
     
     const client = new MongoClient(uri)
     const userId = req.query.userId
@@ -139,7 +139,7 @@ app.get('/user', async (req, res) => {
     }
 })
 
-app.get('/gendered-users', async (req, res) => {
+app.get('/user/gendered-users', async (req, res) => {
     const client = new MongoClient(uri)
     const gender = req.query.gender
     const userId = req.query.userId
@@ -164,7 +164,7 @@ app.get('/gendered-users', async (req, res) => {
     }
 })
 
-app.get('/filters', async (req, res) => {    //utilisé dans settings également
+app.get('/user/filters', async (req, res) => {    //utilisé dans settings également
     const client = new MongoClient(uri)
     const userId = req.query.userId
 
@@ -263,7 +263,7 @@ app.put('/user', async (req, res) => {
 
 //Settings
 
-app.put('/change-password', async (req, res) => {
+app.put('/user/change-password', async (req, res) => {
     const client = new MongoClient(uri)
     const password = req.body.password
     try {
@@ -290,7 +290,7 @@ app.put('/change-password', async (req, res) => {
     }
 })
 
-app.put('/userUp', async (req, res) => {
+app.put('/user/update', async (req, res) => {
     const client = new MongoClient(uri)
     const formData = req.body.user
     const formSocials = req.body.socials
@@ -342,7 +342,7 @@ app.put('/userUp', async (req, res) => {
     }
 })
 
-app.delete('/userDel', async (req, res) => {
+app.delete('/user/delete', async (req, res) => {
     const client = new MongoClient(uri)
     const userId = req.query
     try {
@@ -361,7 +361,7 @@ app.delete('/userDel', async (req, res) => {
     }
 })
 
-app.get('/filters', async (req, res) => {
+app.get('/user/filters', async (req, res) => {
     const client = new MongoClient(uri)
     const userId = req.query.userId
 
@@ -380,7 +380,7 @@ app.get('/filters', async (req, res) => {
 
 //Premium
 
-app.get('/premium-list', async (req, res) => {
+app.get('/user/premium-list', async (req, res) => {
     const client = new MongoClient(uri)
     const userId = req.query.userId
     try {
@@ -407,7 +407,7 @@ app.get('/premium-list', async (req, res) => {
 })
 
 
-app.put('/addmatch', async (req, res) => {
+app.put('/user/addmatch', async (req, res) => {
     const client = new MongoClient(uri)
     const { userId, matchedUserId } = req.body
     try {
@@ -447,7 +447,7 @@ app.get('/messages', async (req, res) => {
     }
 })
 
-app.get('/socials', async (req, res) => { 
+app.get('/user/socials', async (req, res) => { 
     const client = new MongoClient(uri)
     const userId = req.query.userId
 
@@ -484,7 +484,7 @@ app.post('/message', async (req, res) => {
 
 //BecomePremium
 
-app.get('/verify-code', async (req, res) => {
+app.get('/code/verify', async (req, res) => {
     const client = new MongoClient(uri)
    
     const clientCode = req.query.code
@@ -500,7 +500,7 @@ app.get('/verify-code', async (req, res) => {
     }
 })
 
-app.put('/change-status', async (req, res) => {
+app.put('/user/status', async (req, res) => {
     const client = new MongoClient(uri)
     const newStatus = req.body.newUserStatus
     const userId = req.body.userId
@@ -522,7 +522,7 @@ app.put('/change-status', async (req, res) => {
     }
 })
 
-app.post('/new-code', async (req, res) => {
+app.post('/code/add', async (req, res) => {
     const client = new MongoClient(uri)
     const newCode = req.body.code
     try {
