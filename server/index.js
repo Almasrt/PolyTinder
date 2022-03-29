@@ -9,7 +9,7 @@ const app = express()
 const uri = process.env.MONGODB_URI
 const PORT = process.env.PORT
 
-app.use(cors())
+app.use(cors({origin:'https://thepolytinder.herokuapp.com'}))
 app.use(express.json())
 
 
